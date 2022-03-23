@@ -39,11 +39,15 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
   Authorization _onAcceptButtonPressed(String email, String password) async* {
     if (email.isEmpty || password.isEmpty) {
       yield state.copyWith(inputDataStatus: InputDataStatus.invalid);
+      return;
     }
+
+    _routerEventSink.add(RouterEvent.toMain());
   }
 
   Authorization _onForgotPasswordPressed() async* {
     yield state.copyWith(
+      inputDataStatus: InputDataStatus.valid,
       screenType: ScreenType.registration,
     );
   }

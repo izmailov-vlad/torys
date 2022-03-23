@@ -25,6 +25,10 @@ class _$RouterEventTearOff {
   ToSplash toSplash() {
     return const ToSplash();
   }
+
+  ToMain toMain() {
+    return const ToMain();
+  }
 }
 
 /// @nodoc
@@ -36,18 +40,21 @@ mixin _$RouterEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() pop,
     required TResult Function() toSplash,
+    required TResult Function() toMain,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? pop,
     TResult Function()? toSplash,
+    TResult Function()? toMain,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? pop,
     TResult Function()? toSplash,
+    TResult Function()? toMain,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -55,18 +62,21 @@ mixin _$RouterEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(OnPop value) pop,
     required TResult Function(ToSplash value) toSplash,
+    required TResult Function(ToMain value) toMain,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(OnPop value)? pop,
     TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(OnPop value)? pop,
     TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -128,6 +138,7 @@ class _$OnPop implements OnPop {
   TResult when<TResult extends Object?>({
     required TResult Function() pop,
     required TResult Function() toSplash,
+    required TResult Function() toMain,
   }) {
     return pop();
   }
@@ -137,6 +148,7 @@ class _$OnPop implements OnPop {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? pop,
     TResult Function()? toSplash,
+    TResult Function()? toMain,
   }) {
     return pop?.call();
   }
@@ -146,6 +158,7 @@ class _$OnPop implements OnPop {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? pop,
     TResult Function()? toSplash,
+    TResult Function()? toMain,
     required TResult orElse(),
   }) {
     if (pop != null) {
@@ -159,6 +172,7 @@ class _$OnPop implements OnPop {
   TResult map<TResult extends Object?>({
     required TResult Function(OnPop value) pop,
     required TResult Function(ToSplash value) toSplash,
+    required TResult Function(ToMain value) toMain,
   }) {
     return pop(this);
   }
@@ -168,6 +182,7 @@ class _$OnPop implements OnPop {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(OnPop value)? pop,
     TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
   }) {
     return pop?.call(this);
   }
@@ -177,6 +192,7 @@ class _$OnPop implements OnPop {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(OnPop value)? pop,
     TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
     required TResult orElse(),
   }) {
     if (pop != null) {
@@ -230,6 +246,7 @@ class _$ToSplash implements ToSplash {
   TResult when<TResult extends Object?>({
     required TResult Function() pop,
     required TResult Function() toSplash,
+    required TResult Function() toMain,
   }) {
     return toSplash();
   }
@@ -239,6 +256,7 @@ class _$ToSplash implements ToSplash {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? pop,
     TResult Function()? toSplash,
+    TResult Function()? toMain,
   }) {
     return toSplash?.call();
   }
@@ -248,6 +266,7 @@ class _$ToSplash implements ToSplash {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? pop,
     TResult Function()? toSplash,
+    TResult Function()? toMain,
     required TResult orElse(),
   }) {
     if (toSplash != null) {
@@ -261,6 +280,7 @@ class _$ToSplash implements ToSplash {
   TResult map<TResult extends Object?>({
     required TResult Function(OnPop value) pop,
     required TResult Function(ToSplash value) toSplash,
+    required TResult Function(ToMain value) toMain,
   }) {
     return toSplash(this);
   }
@@ -270,6 +290,7 @@ class _$ToSplash implements ToSplash {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(OnPop value)? pop,
     TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
   }) {
     return toSplash?.call(this);
   }
@@ -279,6 +300,7 @@ class _$ToSplash implements ToSplash {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(OnPop value)? pop,
     TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
     required TResult orElse(),
   }) {
     if (toSplash != null) {
@@ -290,4 +312,112 @@ class _$ToSplash implements ToSplash {
 
 abstract class ToSplash implements RouterEvent {
   const factory ToSplash() = _$ToSplash;
+}
+
+/// @nodoc
+abstract class $ToMainCopyWith<$Res> {
+  factory $ToMainCopyWith(ToMain value, $Res Function(ToMain) then) =
+      _$ToMainCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$ToMainCopyWithImpl<$Res> extends _$RouterEventCopyWithImpl<$Res>
+    implements $ToMainCopyWith<$Res> {
+  _$ToMainCopyWithImpl(ToMain _value, $Res Function(ToMain) _then)
+      : super(_value, (v) => _then(v as ToMain));
+
+  @override
+  ToMain get _value => super._value as ToMain;
+}
+
+/// @nodoc
+
+class _$ToMain implements ToMain {
+  const _$ToMain();
+
+  @override
+  String toString() {
+    return 'RouterEvent.toMain()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is ToMain);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() pop,
+    required TResult Function() toSplash,
+    required TResult Function() toMain,
+  }) {
+    return toMain();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? pop,
+    TResult Function()? toSplash,
+    TResult Function()? toMain,
+  }) {
+    return toMain?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? pop,
+    TResult Function()? toSplash,
+    TResult Function()? toMain,
+    required TResult orElse(),
+  }) {
+    if (toMain != null) {
+      return toMain();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(OnPop value) pop,
+    required TResult Function(ToSplash value) toSplash,
+    required TResult Function(ToMain value) toMain,
+  }) {
+    return toMain(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(OnPop value)? pop,
+    TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
+  }) {
+    return toMain?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(OnPop value)? pop,
+    TResult Function(ToSplash value)? toSplash,
+    TResult Function(ToMain value)? toMain,
+    required TResult orElse(),
+  }) {
+    if (toMain != null) {
+      return toMain(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ToMain implements RouterEvent {
+  const factory ToMain() = _$ToMain;
 }

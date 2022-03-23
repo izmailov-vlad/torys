@@ -20,7 +20,12 @@ class RouterBloc extends Bloc<RouterEvent, List<RouteInfo>>
   Stream<List<RouteInfo>> mapEventToState(RouterEvent event) => event.when(
         pop: _onPop,
         toSplash: _toSplashScreen,
+        toMain: _toMain,
       );
+
+  RouteEventHandler _toMain() async* {
+    yield [...state, ScreenProvider.main()];
+  }
 
   RouteEventHandler _toSplashScreen() async* {
     yield [...state, ScreenProvider.splash()];

@@ -43,7 +43,6 @@ class TorysAuthorizationForm extends StatelessWidget {
           screenTypeTitleText = 'У вас уже есть аккаунт?';
           screentTypeButtonText = 'Войти';
           acceptButtonText = 'Зарегистрироваться';
-          emailText = 'Адрес электронной почты';
 
           child = Column(
             children: [
