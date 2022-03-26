@@ -20,7 +20,7 @@ class ScreenProvider {
         id: MainScreen.id,
         builder: (_) => BlocProvider<MainBloc>(
           create: (_) => getIt<MainBloc>(),
-          child: const MainScreen(),
+          child: MainScreen(),
         ),
       );
 }

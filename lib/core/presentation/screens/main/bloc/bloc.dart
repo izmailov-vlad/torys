@@ -10,7 +10,15 @@ class MainBloc extends Bloc<MainEvent, MainState> {
   MainBloc() : super(MainState());
 
   @override
-  Stream<MainState> mapEventToState(MainEvent event) => event.when(load: _load);
+  Stream<MainState> mapEventToState(MainEvent event) => event.when(
+        load: _load,
+        changeScreen: _changeScreen,
+      );
+  Main _changeScreen(Screen destination) async* {
+    yield state.copyWith(
+      currentScreen: destination,
+    );
+  }
 
   Main _load() async* {}
 }

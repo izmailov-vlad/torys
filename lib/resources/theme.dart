@@ -6,4 +6,5 @@ class TorysTheme {
   static final grey = Color(0xFFCCCCCC);
   static final red = Color(0xFFDC5151);
   static final black = Color(0xFF423050);
+  static final darkGrey = Color(0xFFF5F5F5);
 }

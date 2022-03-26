@@ -21,6 +21,12 @@ class _$MainEventTearOff {
   Load load() {
     return const Load();
   }
+
+  ChangeScreen changeScreen(Screen destination) {
+    return ChangeScreen(
+      destination,
+    );
+  }
 }
 
 /// @nodoc
@@ -31,32 +37,38 @@ mixin _$MainEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() load,
+    required TResult Function(Screen destination) changeScreen,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? load,
+    TResult Function(Screen destination)? changeScreen,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? load,
+    TResult Function(Screen destination)? changeScreen,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Load value) load,
+    required TResult Function(ChangeScreen value) changeScreen,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Load value)? load,
+    TResult Function(ChangeScreen value)? changeScreen,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Load value)? load,
+    TResult Function(ChangeScreen value)? changeScreen,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -122,6 +134,7 @@ class _$Load with DiagnosticableTreeMixin implements Load {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() load,
+    required TResult Function(Screen destination) changeScreen,
   }) {
     return load();
   }
@@ -130,6 +143,7 @@ class _$Load with DiagnosticableTreeMixin implements Load {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? load,
+    TResult Function(Screen destination)? changeScreen,
   }) {
     return load?.call();
   }
@@ -138,6 +152,7 @@ class _$Load with DiagnosticableTreeMixin implements Load {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? load,
+    TResult Function(Screen destination)? changeScreen,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -150,6 +165,7 @@ class _$Load with DiagnosticableTreeMixin implements Load {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Load value) load,
+    required TResult Function(ChangeScreen value) changeScreen,
   }) {
     return load(this);
   }
@@ -158,6 +174,7 @@ class _$Load with DiagnosticableTreeMixin implements Load {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(Load value)? load,
+    TResult Function(ChangeScreen value)? changeScreen,
   }) {
     return load?.call(this);
   }
@@ -166,6 +183,7 @@ class _$Load with DiagnosticableTreeMixin implements Load {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Load value)? load,
+    TResult Function(ChangeScreen value)? changeScreen,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -177,4 +195,146 @@ class _$Load with DiagnosticableTreeMixin implements Load {
 
 abstract class Load implements MainEvent {
   const factory Load() = _$Load;
+}
+
+/// @nodoc
+abstract class $ChangeScreenCopyWith<$Res> {
+  factory $ChangeScreenCopyWith(
+          ChangeScreen value, $Res Function(ChangeScreen) then) =
+      _$ChangeScreenCopyWithImpl<$Res>;
+  $Res call({Screen destination});
+}
+
+/// @nodoc
+class _$ChangeScreenCopyWithImpl<$Res> extends _$MainEventCopyWithImpl<$Res>
+    implements $ChangeScreenCopyWith<$Res> {
+  _$ChangeScreenCopyWithImpl(
+      ChangeScreen _value, $Res Function(ChangeScreen) _then)
+      : super(_value, (v) => _then(v as ChangeScreen));
+
+  @override
+  ChangeScreen get _value => super._value as ChangeScreen;
+
+  @override
+  $Res call({
+    Object? destination = freezed,
+  }) {
+    return _then(ChangeScreen(
+      destination == freezed
+          ? _value.destination
+          : destination // ignore: cast_nullable_to_non_nullable
+              as Screen,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ChangeScreen with DiagnosticableTreeMixin implements ChangeScreen {
+  const _$ChangeScreen(this.destination);
+
+  @override
+  final Screen destination;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'MainEvent.changeScreen(destination: $destination)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'MainEvent.changeScreen'))
+      ..add(DiagnosticsProperty('destination', destination));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ChangeScreen &&
+            const DeepCollectionEquality()
+                .equals(other.destination, destination));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(destination));
+
+  @JsonKey(ignore: true)
+  @override
+  $ChangeScreenCopyWith<ChangeScreen> get copyWith =>
+      _$ChangeScreenCopyWithImpl<ChangeScreen>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() load,
+    required TResult Function(Screen destination) changeScreen,
+  }) {
+    return changeScreen(destination);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function(Screen destination)? changeScreen,
+  }) {
+    return changeScreen?.call(destination);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? load,
+    TResult Function(Screen destination)? changeScreen,
+    required TResult orElse(),
+  }) {
+    if (changeScreen != null) {
+      return changeScreen(destination);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Load value) load,
+    required TResult Function(ChangeScreen value) changeScreen,
+  }) {
+    return changeScreen(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(Load value)? load,
+    TResult Function(ChangeScreen value)? changeScreen,
+  }) {
+    return changeScreen?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Load value)? load,
+    TResult Function(ChangeScreen value)? changeScreen,
+    required TResult orElse(),
+  }) {
+    if (changeScreen != null) {
+      return changeScreen(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ChangeScreen implements MainEvent {
+  const factory ChangeScreen(Screen destination) = _$ChangeScreen;
+
+  Screen get destination;
+  @JsonKey(ignore: true)
+  $ChangeScreenCopyWith<ChangeScreen> get copyWith =>
+      throw _privateConstructorUsedError;
 }
