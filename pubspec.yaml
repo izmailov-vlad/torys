@@ -47,7 +47,6 @@ dependencies:
 
   #network
   http: ^0.13.4
-  flutter_web_auth: ^0.4.0
   oauth2: ^2.0.0
   retrofit: '>=3.0.0 <4.0.0'
   dio: ^4.0.4

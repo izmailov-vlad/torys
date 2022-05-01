@@ -10,6 +10,6 @@ class AuthorizationEvent with _$AuthorizationEvent {
   const factory AuthorizationEvent.onForgotPasswordPressed() =
       OnForgotPasswordPressed;
   const factory AuthorizationEvent.onAcceptButtonPressed(
-      String email, String password) = OnAcceptButtonPressed;
+      String email, String name, String password) = OnAcceptButtonPressed;
   const factory AuthorizationEvent.checkUser() = CheckUser;
 }

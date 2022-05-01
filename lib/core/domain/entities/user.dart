@@ -1,6 +1,7 @@
 class UserDto {
-  final String login;
+  final String email;
   final String password;
+  final String name;
 
-  UserDto({required this.login, required this.password});
+  UserDto({required this.email, required this.password, required this.name});
 }

@@ -144,6 +144,7 @@ class TorysAuthorizationForm extends StatelessWidget {
                 context.read<AuthorizationBloc>().add(
                       AuthorizationEvent.onAcceptButtonPressed(
                         AuthorizationInherited.of(context).email.text,
+                        AuthorizationInherited.of(context).name.text,
                         AuthorizationInherited.of(context).password.text,
                       ),
                     );

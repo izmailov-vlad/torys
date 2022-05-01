@@ -1,0 +1,4 @@
+enum NetworkResult {
+  success,
+  error,
+}

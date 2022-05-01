@@ -6,6 +6,7 @@ part 'database.g.dart';
 
 abstract class DatabaseStorage {
   Favourites? favourites;
+  String? token;
   Future<int> clear();
 }
 
@@ -13,7 +14,7 @@ abstract class DatabaseStorage {
 class DatabaseStorageHive implements DatabaseStorage {
   static const _hiveBoxName = 'user';
   static const _favourites = 'favourites';
-
+  static const _token = 'token';
   static Future init() async {
     await Hive.openBox(_hiveBoxName);
   }
@@ -35,11 +36,22 @@ class DatabaseStorageHive implements DatabaseStorage {
   set favourites(Favourites? favourites) {
     _hiveBox.put(_favourites, favourites);
   }
+
+  @override
+  String? get token {
+    var token = _hiveBox.get(_token);
+    return token;
+  }
+
+  @override
+  set token(String? token) {
+    _hiveBox.put(_token, token);
+  }
 }
 
 @HiveType(typeId: 0)
 class Favourites extends HiveObject {
-  @HiveField(0) 
+  @HiveField(0)
   List<String> favouriteIds;
 
   Favourites(this.favouriteIds);

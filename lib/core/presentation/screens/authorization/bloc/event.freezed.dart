@@ -32,9 +32,11 @@ class _$AuthorizationEventTearOff {
     return const OnForgotPasswordPressed();
   }
 
-  OnAcceptButtonPressed onAcceptButtonPressed(String email, String password) {
+  OnAcceptButtonPressed onAcceptButtonPressed(
+      String email, String name, String password) {
     return OnAcceptButtonPressed(
       email,
+      name,
       password,
     );
   }
@@ -54,7 +56,7 @@ mixin _$AuthorizationEvent {
     required TResult Function() changeScreenType,
     required TResult Function(InputType requestedInput) requestFocusOnInput,
     required TResult Function() onForgotPasswordPressed,
-    required TResult Function(String email, String password)
+    required TResult Function(String email, String name, String password)
         onAcceptButtonPressed,
     required TResult Function() checkUser,
   }) =>
@@ -64,7 +66,8 @@ mixin _$AuthorizationEvent {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
   }) =>
       throw _privateConstructorUsedError;
@@ -73,7 +76,8 @@ mixin _$AuthorizationEvent {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
     required TResult orElse(),
   }) =>
@@ -171,7 +175,7 @@ class _$ChangeScreenType implements ChangeScreenType {
     required TResult Function() changeScreenType,
     required TResult Function(InputType requestedInput) requestFocusOnInput,
     required TResult Function() onForgotPasswordPressed,
-    required TResult Function(String email, String password)
+    required TResult Function(String email, String name, String password)
         onAcceptButtonPressed,
     required TResult Function() checkUser,
   }) {
@@ -184,7 +188,8 @@ class _$ChangeScreenType implements ChangeScreenType {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
   }) {
     return changeScreenType?.call();
@@ -196,7 +201,8 @@ class _$ChangeScreenType implements ChangeScreenType {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
     required TResult orElse(),
   }) {
@@ -322,7 +328,7 @@ class _$RequestFocusOnInput implements RequestFocusOnInput {
     required TResult Function() changeScreenType,
     required TResult Function(InputType requestedInput) requestFocusOnInput,
     required TResult Function() onForgotPasswordPressed,
-    required TResult Function(String email, String password)
+    required TResult Function(String email, String name, String password)
         onAcceptButtonPressed,
     required TResult Function() checkUser,
   }) {
@@ -335,7 +341,8 @@ class _$RequestFocusOnInput implements RequestFocusOnInput {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
   }) {
     return requestFocusOnInput?.call(requestedInput);
@@ -347,7 +354,8 @@ class _$RequestFocusOnInput implements RequestFocusOnInput {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
     required TResult orElse(),
   }) {
@@ -454,7 +462,7 @@ class _$OnForgotPasswordPressed implements OnForgotPasswordPressed {
     required TResult Function() changeScreenType,
     required TResult Function(InputType requestedInput) requestFocusOnInput,
     required TResult Function() onForgotPasswordPressed,
-    required TResult Function(String email, String password)
+    required TResult Function(String email, String name, String password)
         onAcceptButtonPressed,
     required TResult Function() checkUser,
   }) {
@@ -467,7 +475,8 @@ class _$OnForgotPasswordPressed implements OnForgotPasswordPressed {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
   }) {
     return onForgotPasswordPressed?.call();
@@ -479,7 +488,8 @@ class _$OnForgotPasswordPressed implements OnForgotPasswordPressed {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
     required TResult orElse(),
   }) {
@@ -541,7 +551,7 @@ abstract class $OnAcceptButtonPressedCopyWith<$Res> {
   factory $OnAcceptButtonPressedCopyWith(OnAcceptButtonPressed value,
           $Res Function(OnAcceptButtonPressed) then) =
       _$OnAcceptButtonPressedCopyWithImpl<$Res>;
-  $Res call({String email, String password});
+  $Res call({String email, String name, String password});
 }
 
 /// @nodoc
@@ -558,12 +568,17 @@ class _$OnAcceptButtonPressedCopyWithImpl<$Res>
   @override
   $Res call({
     Object? email = freezed,
+    Object? name = freezed,
     Object? password = freezed,
   }) {
     return _then(OnAcceptButtonPressed(
       email == freezed
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
               as String,
       password == freezed
           ? _value.password
@@ -576,16 +591,18 @@ class _$OnAcceptButtonPressedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
-  const _$OnAcceptButtonPressed(this.email, this.password);
+  const _$OnAcceptButtonPressed(this.email, this.name, this.password);
 
   @override
   final String email;
+  @override
+  final String name;
   @override
   final String password;
 
   @override
   String toString() {
-    return 'AuthorizationEvent.onAcceptButtonPressed(email: $email, password: $password)';
+    return 'AuthorizationEvent.onAcceptButtonPressed(email: $email, name: $name, password: $password)';
   }
 
   @override
@@ -594,6 +611,7 @@ class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
         (other.runtimeType == runtimeType &&
             other is OnAcceptButtonPressed &&
             const DeepCollectionEquality().equals(other.email, email) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.password, password));
   }
 
@@ -601,6 +619,7 @@ class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(email),
+      const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(password));
 
   @JsonKey(ignore: true)
@@ -615,11 +634,11 @@ class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
     required TResult Function() changeScreenType,
     required TResult Function(InputType requestedInput) requestFocusOnInput,
     required TResult Function() onForgotPasswordPressed,
-    required TResult Function(String email, String password)
+    required TResult Function(String email, String name, String password)
         onAcceptButtonPressed,
     required TResult Function() checkUser,
   }) {
-    return onAcceptButtonPressed(email, password);
+    return onAcceptButtonPressed(email, name, password);
   }
 
   @override
@@ -628,10 +647,11 @@ class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
   }) {
-    return onAcceptButtonPressed?.call(email, password);
+    return onAcceptButtonPressed?.call(email, name, password);
   }
 
   @override
@@ -640,12 +660,13 @@ class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
     required TResult orElse(),
   }) {
     if (onAcceptButtonPressed != null) {
-      return onAcceptButtonPressed(email, password);
+      return onAcceptButtonPressed(email, name, password);
     }
     return orElse();
   }
@@ -694,10 +715,11 @@ class _$OnAcceptButtonPressed implements OnAcceptButtonPressed {
 }
 
 abstract class OnAcceptButtonPressed implements AuthorizationEvent {
-  const factory OnAcceptButtonPressed(String email, String password) =
-      _$OnAcceptButtonPressed;
+  const factory OnAcceptButtonPressed(
+      String email, String name, String password) = _$OnAcceptButtonPressed;
 
   String get email;
+  String get name;
   String get password;
   @JsonKey(ignore: true)
   $OnAcceptButtonPressedCopyWith<OnAcceptButtonPressed> get copyWith =>
@@ -746,7 +768,7 @@ class _$CheckUser implements CheckUser {
     required TResult Function() changeScreenType,
     required TResult Function(InputType requestedInput) requestFocusOnInput,
     required TResult Function() onForgotPasswordPressed,
-    required TResult Function(String email, String password)
+    required TResult Function(String email, String name, String password)
         onAcceptButtonPressed,
     required TResult Function() checkUser,
   }) {
@@ -759,7 +781,8 @@ class _$CheckUser implements CheckUser {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
   }) {
     return checkUser?.call();
@@ -771,7 +794,8 @@ class _$CheckUser implements CheckUser {
     TResult Function()? changeScreenType,
     TResult Function(InputType requestedInput)? requestFocusOnInput,
     TResult Function()? onForgotPasswordPressed,
-    TResult Function(String email, String password)? onAcceptButtonPressed,
+    TResult Function(String email, String name, String password)?
+        onAcceptButtonPressed,
     TResult Function()? checkUser,
     required TResult orElse(),
   }) {
