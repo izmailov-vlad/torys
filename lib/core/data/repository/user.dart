@@ -1,53 +1,21 @@
-import 'dart:developer';
-
-import 'package:injectable/injectable.dart';
-import 'package:torys/core/data/network/model/network_result.dart';
-import 'package:torys/core/data/network/model/user.dart';
-import 'package:torys/core/data/network/torys_client.dart';
-import 'package:torys/utils/result.dart';
-
-abstract class UserRepository {
-  Future<Result<String>> login(String email, String password);
-  void logout();
-  Future<Result<String>> register(User user);
-}
+part of data;
 
 @Injectable(as: UserRepository)
 class UserRepositoryImpl extends UserRepository {
-  final TorysClient _torysClient;
 
-  UserRepositoryImpl(this._torysClient);
+
+  UserRepositoryImpl();
+
   @override
-  Future<Result<String>> login(String email, String password) async {
-    try {
-      final token = await _torysClient.login({
-        "email": email,
-        "password": password,
-      });
-      return Result.success(token);
-    } catch (ex) {
-      return Result.failure(null);
-    }
+  Future<Result<void>> login(String email, String password) async {
+    return Result.success(null);
   }
 
   @override
-  void logout() {
-    // TODO: implement logout
-  }
+  void logout() {}
 
   @override
-  Future<Result<String>> register(User user) async {
-    try {
-      final token = await _torysClient.register({
-        "name": user.name,
-        "email": user.email,
-        "password": user.password,
-        "password_confirmation": user.password,
-      });
-
-      return Result.success(token);
-    } catch (ex) {
-      return Result.failure(null);
-    }
+  Future<Result<void>> register(User user) async {
+    return Result.success(null);
   }
 }

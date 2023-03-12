@@ -1,44 +1,37 @@
-import 'dart:developer';
-
-import 'package:injectable/injectable.dart';
-import 'package:torys/core/data/network/model/author.dart';
-import 'package:torys/core/domain/entities/book.dart';
-
-import '../network/torys_client.dart';
-
-abstract class BooksRepository {
-  List<BookDto> getBooksByGenre();
-  List<BookDto> getBooksByAuthor(Author author);
-  List<BookDto> getRecommendations();
-  Future<void> getBooks();
-}
+part of data;
 
 @Injectable(as: BooksRepository)
 class BooksRepositoryImpl extends BooksRepository {
-  final TorysClient _torysClient;
+  final BooksService booksService;
 
-  BooksRepositoryImpl(this._torysClient);
+  BooksRepositoryImpl(this.booksService);
+
   @override
-  List<BookDto> getBooksByAuthor(Author author) {
+  List<Book> getBooksByAuthor(int authorId) {
     // TODO: implement getBooksByAuthor
     throw UnimplementedError();
   }
 
   @override
-  List<BookDto> getBooksByGenre() {
+  List<Book> getBooksByGenre() {
     // TODO: implement getBooksByGenre
     throw UnimplementedError();
   }
 
   @override
-  List<BookDto> getRecommendations() {
+  List<Book> getRecommendations() {
     // TODO: implement getRecommendations
     throw UnimplementedError();
   }
 
   @override
-  Future<void> getBooks() async {
-    final response = await _torysClient.getBooks();
-    log(response.title ?? 'not');
+  Future<void> getBooks() async {}
+
+  @override
+  Future<List<GenreModel>?> getGenres() async {
+    final genres = await booksService.getGenres();
+    return genres?.genres
+        .map<GenreModel>((genre) => genre.toGenreModel())
+        .toList();
   }
 }

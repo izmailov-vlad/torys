@@ -1,7 +1,4 @@
-import 'package:injectable/injectable.dart';
-import 'package:torys/core/data/repository/user.dart';
-import 'package:torys/core/data/storage/database.dart';
-import 'package:torys/utils/result.dart';
+part of domain;
 
 abstract class LogInUseCase {
   Future<Result<void>> call(String email, String password);

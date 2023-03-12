@@ -1,9 +1,8 @@
-import 'package:torys/core/data/network/model/book.dart';
-import 'package:torys/core/domain/entities/book.dart';
+part of data;
 
 extension BookExtension on Book {
-  BookDto toBookDto() {
-    return BookDto(
+  Book toBookDto() {
+    return Book(
       image: image ?? '',
       title: title ?? '',
     );

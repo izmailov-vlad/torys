@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:torys/core/presentation/provider/screen.dart';
-import 'package:torys/core/presentation/router/bloc/bloc.dart';
-
+import '../../../ui.dart';
+import '../provider/screen.dart';
 import 'bloc/event.dart';
 
 class AppRouterDelegate extends RouterDelegate<RouteInfo>
@@ -17,12 +14,12 @@ class AppRouterDelegate extends RouterDelegate<RouteInfo>
       builder: (context, stack) {
         if (stack.isEmpty) return Container();
         var path = '';
-        final pages = <TotoPage>[];
-        stack.forEach((page) {
+        final pages = <AppPage>[];
+        for (var page in stack) {
           path += page.id;
 
           pages.add(
-            TotoPage(
+            AppPage(
               id: page.id,
               type: page.type,
               key: ValueKey(path),
@@ -34,16 +31,15 @@ class AppRouterDelegate extends RouterDelegate<RouteInfo>
               ),
             ),
           );
-        });
+        }
         return Navigator(
           key: navigatorKey,
           pages: pages,
-          reportsRouteUpdateToEngine: true,
           onPopPage: (route, result) {
             if (!route.didPop(result)) return false;
 
             if (route.settings.name != null) {
-              context.read<RouterBloc>().add(RouterEvent.pop());
+              context.read<RouterBloc>().add(const RouterEvent.pop());
             }
             return true;
           },
@@ -56,8 +52,8 @@ class AppRouterDelegate extends RouterDelegate<RouteInfo>
   Future<void> setNewRoutePath(RouteInfo configuration) async {}
 }
 
-class TotoPage<T> extends Page<T> {
-  TotoPage({
+class AppPage<T> extends Page<T> {
+  const AppPage({
     required this.child,
     required this.type,
     required String id,

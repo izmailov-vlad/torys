@@ -2,9 +2,7 @@ name: torys
 flutter: 
   uses-material-design: true
   assets:
-    - assets/svg/icons/
-    - assets/svg/
-    - assets/png/
+    - assets/images/
 description: A new Flutter project.
 
 publish_to: 'none' 
@@ -12,7 +10,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.0-14.0.dev <3.0.0"
+  sdk: ">=2.19.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -26,40 +24,49 @@ dependencies:
 
   #injection
   get_it: ^7.2.0
-  injectable: ^1.5.3
-  freezed: ^1.1.1
+  injectable: ^2.1.0
+  freezed: ^2.3.2
+
 
   #ui
   carousel_slider: ^4.0.0
-  flutter_svg: ^1.0.3
+  sizer: ^2.0.15
+  mask_text_input_formatter: ^2.4.0
+  shimmer: ^2.0.0
 
   #storage
   hive: ^2.0.5
   hive_flutter: ^1.1.0
-  hive_generator: ^1.1.0
+  hive_generator: ^2.0.0
 
   #architecture
-  flutter_bloc: ^7.2.0
+  flutter_bloc: ^8.1.2
   
 
   #rx
   rxdart: ^0.27.3
 
   #network
-  http: ^0.13.4
   oauth2: ^2.0.0
-  retrofit: '>=3.0.0 <4.0.0'
-  dio: ^4.0.4
-  meta: ^1.7.0
+  dio: ^5.0.1
+  meta: ^1.8.0
+  json_annotation: ^4.8.0
+  either_dart: ^0.3.0
+
+  #logging:
+  logger: ^1.2.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  #generation
-  build_runner: ^2.1.7
-  injectable_generator: ^1.5.3
+  #models
+  equatable: ^2.0.5
 
-  #retrofit
-  retrofit_generator: ^4.0.1
-  json_serializable: ^6.1.4
+  #linter
+  flutter_lints: ^2.0.0
+
+  #generation
+  build_runner: ^2.3.3
+  injectable_generator: ^2.1.4
+  json_serializable: ^6.6.1

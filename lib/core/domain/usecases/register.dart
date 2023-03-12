@@ -1,13 +1,7 @@
-import 'package:injectable/injectable.dart';
-import 'package:torys/core/data/repository/books.dart';
-import 'package:torys/core/data/repository/user.dart';
-import 'package:torys/core/data/storage/database.dart';
-import 'package:torys/core/domain/entities/user.dart';
-import 'package:torys/core/domain/adapters/user.dart';
-import 'package:torys/utils/result.dart';
+part of domain;
 
 abstract class RegisterUseCase {
-  Future<Result<void>> call(String email, String name, String password);
+  Future<Result<void>> call(UserModel user);
 }
 
 @Injectable(as: RegisterUseCase)
@@ -19,11 +13,10 @@ class RegisterUseCaseImpl extends RegisterUseCase {
     this.userRepository,
     this.databaseStorage,
   );
+
   @override
-  Future<Result<void>> call(String email, String name, String password) async {
-    final user = UserDto(email: email, password: password, name: name);
+  Future<Result<void>> call(UserModel user) async {
     final result = await userRepository.register(user.toUserData());
-    databaseStorage.token = result.value;
     return result;
   }
 }

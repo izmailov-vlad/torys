@@ -1,7 +1,13 @@
-class Book {
-  final String image;
-  final String title;
-  final String author;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Book({required this.image, required this.title, required this.author});
+part 'book.freezed.dart';
+
+@freezed
+class Book with _$Book {
+  const factory Book({
+    required String image,
+    required String title,
+    required String author,
+    required int rate,
+  }) = _Book;
 }

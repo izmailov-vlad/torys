@@ -1,27 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:torys/core/presentation/router/router.dart';
-import 'package:torys/core/presentation/screens/authorization/authoriation.dart';
-import 'package:torys/core/presentation/screens/authorization/bloc/bloc.dart';
-import 'package:torys/core/presentation/screens/main/bloc/bloc.dart';
-import 'package:torys/core/presentation/screens/main/main.dart';
-import 'package:torys/injection/injection.dart';
+import '../../../injection/injection.dart';
+import '../../../ui.dart';
+import '../screens.dart';
 
 class ScreenProvider {
-  static RouteInfo splash() => RouteInfo(
-        id: AuthorizationScreen.id,
-        builder: (_) => BlocProvider<AuthorizationBloc>(
-          create: (_) => getIt<AuthorizationBloc>(),
-          child: const AuthorizationScreen(),
-        ),
-      );
-
   static RouteInfo main() => RouteInfo(
         id: MainScreen.id,
-        builder: (_) => BlocProvider<MainBloc>(
-          create: (_) => getIt<MainBloc>(),
-          child: MainScreen(),
-        ),
+        builder: (_) => const MainScreen(),
       );
 }
 

@@ -1,8 +1,11 @@
-import 'package:torys/core/data/network/model/user.dart';
-import 'package:torys/core/domain/entities/user.dart';
+part of domain;
 
-extension UserExtension on UserDto {
+extension UserExtension on UserModel {
   User toUserData() {
-    return User(name: name, password: password, email: email);
+    return User(
+      name: name,
+      password: password,
+      email: email,
+    );
   }
 }

@@ -1,66 +1,70 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:torys/extensions/text_style.dart';
-import 'package:torys/resources/pngs.dart';
-import 'package:torys/resources/svgs.dart';
+import '../../../ui_kit/images.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/extentions/build_context_extension.dart';
+import 'base/leading_back.dart';
 
-import 'package:torys/resources/theme.dart';
+class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final bool automaticallyImplyLeading;
+  final bool centerTitle;
+  final Widget? title;
+  final double elevation;
+  final double leadingWidth;
+  final EdgeInsets? titlePadding;
+  final Color? appBarColor;
+  final Widget? action;
 
-class TorysAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Size preferedSize;
-
-  const TorysAppBar({
-    Key? key,
-    required this.preferedSize,
-  }) : super(key: key);
+  const BaseAppBar(
+      {Key? key,
+        this.appBarColor,
+        required this.automaticallyImplyLeading,
+        required this.centerTitle,
+        this.title,
+        this.elevation = 0,
+        this.leadingWidth = AppConstants.kLeadingWidth,
+        this.titlePadding,
+        this.action})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(
-          child: Container(
-            color: TorysTheme.white.withOpacity(0),
-            height: preferedSize.height,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 20, left: 20),
-              child: Row(
-                children: [
-                  Image.asset(userDefaultAvatar),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Здравствуйте, Владислав',
-                          style: MontserratTextStyle.s16w500(TorysTheme.black),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          'Статус : Читает',
-                          style:
-                              MontserratTextStyle.s12w500(TorysTheme.mainColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: SvgPicture.asset(icNotification),
-                  ),
-                ],
+        AppBar(
+
+          toolbarHeight: kToolbarHeight,
+          automaticallyImplyLeading: automaticallyImplyLeading,
+          title: Image.asset(
+            AppImages.star,
+            width: AppConstants.appBarLogoWidth,
+            height: AppConstants.appBarLogoHeight,
+          ),
+          titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
+          titleSpacing: 0,
+          centerTitle: centerTitle,
+          backgroundColor:
+          appBarColor ?? context.theme.appBarTheme.backgroundColor,
+          leadingWidth: leadingWidth,
+          leading: automaticallyImplyLeading ? const BaseLeadingBack() : null,
+          //TODO: Вынести доступ к кнопке в контроллер
+          actions: [if (action != null) action!],
+        ),
+        if (title != null)
+          Container(
+            width: double.infinity,
+            color: appBarColor ?? context.theme.appBarTheme.backgroundColor,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: title!,
               ),
             ),
           ),
-        ),
       ],
     );
   }
 
   @override
-  Size get preferredSize => preferedSize;
+  Size get preferredSize => const Size.fromHeight(AppConstants.kToolbarHeight + 7);
 }
