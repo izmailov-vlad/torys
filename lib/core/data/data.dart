@@ -2,6 +2,7 @@ library data;
 
 import 'package:either_dart/either.dart';
 
+import '../../ui.dart';
 import '../../utils/app_logger.dart';
 
 /// utils
@@ -15,9 +16,10 @@ import 'package:dio/dio.dart';
 
 import '../domain/domain.dart';
 
-import '../data/network/dto/author.dart';
-import '../data/network/dto/book.dart';
-import '../data/network/dto/user.dart';
+import 'network/dto/author.dart';
+import 'network/dto/book.dart';
+import 'network/dto/books.dart';
+import 'network/dto/user.dart';
 import 'network/dto/genre.dart';
 import 'network/dto/genres.dart';
 
@@ -36,6 +38,3 @@ part '../data/adapters/book.dart';
 part '../data/adapters/genre.dart';
 
 part '../data/network/app_client.dart';
-
-
-

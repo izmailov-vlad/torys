@@ -7,31 +7,18 @@ class BooksRepositoryImpl extends BooksRepository {
   BooksRepositoryImpl(this.booksService);
 
   @override
-  List<Book> getBooksByAuthor(int authorId) {
-    // TODO: implement getBooksByAuthor
-    throw UnimplementedError();
-  }
-
-  @override
-  List<Book> getBooksByGenre() {
-    // TODO: implement getBooksByGenre
-    throw UnimplementedError();
-  }
-
-  @override
-  List<Book> getRecommendations() {
-    // TODO: implement getRecommendations
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> getBooks() async {}
-
-  @override
   Future<List<GenreModel>?> getGenres() async {
     final genres = await booksService.getGenres();
     return genres?.genres
         .map<GenreModel>((genre) => genre.toGenreModel())
+        .toList();
+  }
+
+  @override
+  Future<List<BookModel>?> getPopularBooks({required int userId}) async {
+    final popularBooksDto = await booksService.getPopularBooks(userId: userId);
+    return popularBooksDto?.books
+        .map<BookModel>((book) => book.toBookModel())
         .toList();
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../ui.dart';
@@ -14,6 +13,7 @@ class BookGenre extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
+      margin: EdgeInsets.symmetric(vertical: 0.5.h),
       decoration: const BoxDecoration(
         color: AppColorsScheme.mainColor,
         boxShadow: AppShadows.mainShadow,

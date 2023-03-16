@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import '../../../entities/genre.dart';
+import '../../../models/book.dart';
+import '../../../models/genre.dart';
 
 part 'state.freezed.dart';
 
@@ -10,6 +10,7 @@ class HomeState with _$HomeState {
 
   const factory HomeState.fetched({
     required List<Genre> genres,
+    required List<Book> books,
   }) = FetchedState;
 
   const factory HomeState.loading() = LoadingState;

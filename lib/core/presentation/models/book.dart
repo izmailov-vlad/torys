@@ -5,9 +5,10 @@ part 'book.freezed.dart';
 @freezed
 class Book with _$Book {
   const factory Book({
+    required int id,
     required String image,
     required String title,
     required String author,
-    required int rate,
+    required double rate,
   }) = _Book;
 }

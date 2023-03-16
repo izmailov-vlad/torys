@@ -5,8 +5,8 @@ import '../ui.dart';
 abstract class AppShadows {
   static const mainShadow = [
     BoxShadow(
-      offset: Offset(0, 4),
-      blurRadius: 8,
+      offset: Offset(0, 2),
+      blurRadius: 4,
       color: AppColorsScheme.brownOpacity,
     )
   ];

@@ -59,7 +59,13 @@ class _MainScreenState extends State<MainScreen> {
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite), label: 'Favorite'),
+                icon: Icon(Icons.favorite),
+                label: 'Favorite',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
             ],
           ),
           body: PageStorage(

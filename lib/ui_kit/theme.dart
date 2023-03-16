@@ -7,7 +7,7 @@ abstract class AppTheme {
       primaryColor: AppColorsScheme.mainColor,
       colorScheme: AppColorsScheme.appColorScheme(),
       textTheme: AppTextTheme.appTextTheme(),
-      scaffoldBackgroundColor: AppColorsScheme.white,
+      scaffoldBackgroundColor: AppColorsScheme.main4,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
           textStyle: MaterialStateProperty.resolveWith(
@@ -67,6 +67,9 @@ abstract class AppTheme {
       bottomNavigationBarTheme: BottomNavigationBarThemeData(),
       shadowColor: AppColorsScheme.shadowColor,
       appBarTheme: AppBarTheme(shadowColor: Colors.transparent),
+      cardTheme: CardTheme(
+        shadowColor: Colors.transparent,
+      ),
     );
   }
 }

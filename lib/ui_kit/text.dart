@@ -41,6 +41,10 @@ abstract class AppTextTheme {
 }
 
 extension TextThemeBold on TextStyle {
+  TextStyle adaptiveFontSize() {
+    return copyWith(fontSize: fontSize?.sp);
+  }
+
   TextStyle toBold() {
     return copyWith(fontWeight: FontWeight.bold);
   }

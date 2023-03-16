@@ -4,6 +4,8 @@ abstract class AppClient {
   Future<Map<String, dynamic>> auth();
 
   Future<Map<String, dynamic>> getGenres();
+
+  Future<Map<String, dynamic>> getPopularBooks({required int userId});
 }
 
 @Injectable(as: AppClient)
@@ -15,7 +17,7 @@ class AppClientImpl implements AppClient {
   @override
   Future<Map<String, dynamic>> auth() async {
     final json = {
-      'success' : true,
+      'success': true,
     };
     return json;
   }
@@ -39,10 +41,52 @@ class AppClientImpl implements AppClient {
         {
           'id': 4,
           'name': 'Биография',
-        }
+        },
+        {
+          'id': 5,
+          'name': 'Фантастика',
+        },
       ]
     };
 
     return genresJson;
+  }
+
+  @override
+  Future<Map<String, dynamic>> getPopularBooks({required int userId}) async {
+    final popularBooksJson = {
+      'books': [
+        {
+          'id': 1,
+          'title': 'Лето Волонтера',
+          'image': AppImages.book,
+          'author': 'Сергей Лукьяненко',
+          'rate': 4.6,
+        },
+        {
+          'id': 2,
+          'title': 'Лето Волонтера',
+          'image': AppImages.book,
+          'author': 'Сергей Лукьяненко',
+          'rate': 4.6,
+        },
+        {
+          'id': 3,
+          'title': 'Лето Волонтера',
+          'image': AppImages.book,
+          'author': 'Сергей Лукьяненко',
+          'rate': 4.6,
+        },
+        {
+          'id': 4,
+          'title': 'Лето Волонтера',
+          'image': AppImages.book,
+          'author': 'Сергей Лукьяненко',
+          'rate': 4.6,
+        }
+      ]
+    };
+
+    return popularBooksJson;
   }
 }

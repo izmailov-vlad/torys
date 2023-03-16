@@ -1,5 +1,7 @@
 import 'package:sizer/sizer.dart';
 
+import 'widgets/books_cards.dart';
+import 'widgets/category.dart';
 import 'widgets/genres.dart';
 import '../../widgets/base/base_loader.dart';
 import '../../../../ui.dart';
@@ -17,11 +19,29 @@ class HomeScreen extends StatelessWidget {
       buildWhen: (prev, curr) => curr is FetchedState || curr is LoadingState,
       builder: (context, state) {
         if (state is FetchedState) {
-          return Padding(
-            padding: EdgeInsets.only(left: 4.w),
-            child: Genres(
-              genres: state.genres,
-            ),
+          return ListView(
+            physics: const ClampingScrollPhysics(),
+            children: [
+              BookCategory(
+                id: 1,
+                title: 'Вам может понравиться',
+                books: state.books,
+                withBorder: true,
+                onBookTap: ({required int bookId}) {},
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: AppPadding.mediumPadding.h),
+                child: Genres(
+                  genres: state.genres,
+                ),
+              ),
+              BookCategory(
+                id: 1,
+                title: 'Популярное',
+                books: state.books,
+                onBookTap: ({required int bookId}) {},
+              ),
+            ],
           );
         }
         return const BaseLoader();
