@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../../../ui.dart';
 import '../../../../utils/extentions/build_context_extension.dart';
 import '../appbar.dart';
 import '../custom/custom_behavior.dart';
+import 'base_title.dart';
 
 class BaseScaffold extends StatelessWidget {
   final Widget body;
@@ -49,47 +52,51 @@ class BaseScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: topSafe,
-      bottom: false,
-      child: GestureDetector(
-        //TODO: Добавить unfocus в extentions
-        onTap: context.unfocus,
-        child: Scaffold(
-          extendBody: expandBody,
-          extendBodyBehindAppBar: extendBodyBehindAppBar,
-          bottomSheet: bottomSheet,
-          floatingActionButton: floatingActionButton,
-          floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-          backgroundColor: backgroundColor,
-          resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-          appBar: appBarTitle != null
-              ? BaseAppBar(
-                  appBarColor: appBarColor,
-                  action: action,
-                  title: Text(
-                    appBarTitle!,
-                    style: AppTextTheme.titleLarge,
-                  ),
-                  automaticallyImplyLeading: automaticallyImplyLeading,
-                  centerTitle: appBarCenterTitle,
-                )
-              : (emptyTop == true
-                  ? AppBar(
-                      toolbarHeight: 0,
-                      backgroundColor:
-                          appBarColor ?? context.theme.scaffoldBackgroundColor,
-                    )
-                  : null),
-          body: SafeArea(
-            top: topSafe,
-            bottom: bottomSafe,
-            child: ScrollConfiguration(
-              behavior: const CustomBehavior(),
-              child: body,
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: SafeArea(
+        top: topSafe,
+        bottom: false,
+        child: GestureDetector(
+          onTap: context.unfocus,
+          child: Scaffold(
+            extendBody: expandBody,
+            extendBodyBehindAppBar: extendBodyBehindAppBar,
+            bottomSheet: bottomSheet,
+            floatingActionButton: floatingActionButton,
+            floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+            backgroundColor: backgroundColor,
+            resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+            appBar: appBarTitle != null
+                ? BaseAppBar(
+                    appBarColor: appBarColor,
+                    action: action,
+                    title: BaseText(
+                      title: appBarTitle!,
+                      style: AppTextTheme.displayLarge,
+                    ),
+                    automaticallyImplyLeading: automaticallyImplyLeading,
+                    centerTitle: appBarCenterTitle,
+                  )
+                : (emptyTop == true
+                    ? AppBar(
+                        toolbarHeight: 0,
+                        backgroundColor:
+                            appBarColor ?? context.theme.scaffoldBackgroundColor,
+                      )
+                    : null),
+            body: SafeArea(
+              top: topSafe,
+              bottom: bottomSafe,
+              child: ScrollConfiguration(
+                behavior: const CustomBehavior(),
+                child: body,
+              ),
             ),
+            bottomNavigationBar: bottomNavigationBar,
           ),
-          bottomNavigationBar: bottomNavigationBar,
         ),
       ),
     );

@@ -1,0 +1,11 @@
+part of presentation;
+
+class CategoryUIModel {
+  final int id;
+  final String title;
+
+  const CategoryUIModel({
+    required this.id,
+    required this.title,
+  });
+}

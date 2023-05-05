@@ -1,92 +1,127 @@
 part of data;
 
-abstract class AppClient {
-  Future<Map<String, dynamic>> auth();
+typedef JsonValue = Map<String, dynamic>;
 
-  Future<Map<String, dynamic>> getGenres();
+abstract class ApiClient {
+  Future<Response> googleAuth();
 
-  Future<Map<String, dynamic>> getPopularBooks({required int userId});
+  Future<Response> auth(AuthRequestDto authRequestDto);
+
+  Future<Response> register(RegisterRequestDto registerRequestDto);
+
+  Future<Response> refreshToken(int userId);
+
+  Future<Response> getCategories();
+
+  Future<Response> getBooksByCategories();
+
+  Future<Response> getBookById(String id);
+
+  Future<Response> getMainBooksContent({required int userId});
+
+  Future<Response> getBooksByCategoryId({required int id});
+
+  Future<Response> logout();
+
+  Future<Response> getBooksByQuery({required SearchRequestDto request});
+
+  Future<Response> getNewBooks();
 }
 
-@Injectable(as: AppClient)
-class AppClientImpl implements AppClient {
-  final Dio dio;
+@Injectable(as: ApiClient)
+class AppClientImpl implements ApiClient {
+  final Dio _dio;
 
-  AppClientImpl(this.dio);
+  AppClientImpl(this._dio);
 
   @override
-  Future<Map<String, dynamic>> auth() async {
-    final json = {
-      'success': true,
-    };
+  Future<Response> auth(authRequestDto) async {
+    final json = await _dio.post(
+      ApiKeys.auth,
+      data: authRequestDto.toJson(),
+    );
+
     return json;
   }
 
   @override
-  Future<Map<String, dynamic>> getGenres() async {
-    final genresJson = {
-      'genres': [
-        {
-          'id': 1,
-          'name': 'Ужасы',
-        },
-        {
-          'id': 2,
-          'name': 'Фэнтези',
-        },
-        {
-          'id': 3,
-          'name': 'Детективы',
-        },
-        {
-          'id': 4,
-          'name': 'Биография',
-        },
-        {
-          'id': 5,
-          'name': 'Фантастика',
-        },
-      ]
-    };
+  Future<Response> register(registerRequestDto) async {
+    final json = await _dio.post(
+      ApiKeys.register,
+      data: registerRequestDto.toJson(),
+    );
 
-    return genresJson;
+    return json;
   }
 
   @override
-  Future<Map<String, dynamic>> getPopularBooks({required int userId}) async {
-    final popularBooksJson = {
-      'books': [
-        {
-          'id': 1,
-          'title': 'Лето Волонтера',
-          'image': AppImages.book,
-          'author': 'Сергей Лукьяненко',
-          'rate': 4.6,
-        },
-        {
-          'id': 2,
-          'title': 'Лето Волонтера',
-          'image': AppImages.book,
-          'author': 'Сергей Лукьяненко',
-          'rate': 4.6,
-        },
-        {
-          'id': 3,
-          'title': 'Лето Волонтера',
-          'image': AppImages.book,
-          'author': 'Сергей Лукьяненко',
-          'rate': 4.6,
-        },
-        {
-          'id': 4,
-          'title': 'Лето Волонтера',
-          'image': AppImages.book,
-          'author': 'Сергей Лукьяненко',
-          'rate': 4.6,
-        }
-      ]
-    };
+  Future<Response> getCategories() async {
+    final json = await _dio.get(
+      ApiKeys.categories,
+    );
 
-    return popularBooksJson;
+    return json;
+  }
+
+  @override
+  Future<Response> getMainBooksContent({required int userId}) async {
+    final json = await _dio.get(
+      ApiKeys.booksByQuery,
+    );
+
+    return json;
+  }
+
+  @override
+  Future<Response> refreshToken(int userId) async {
+    final json = await _dio.get(
+      '${ApiKeys.refreshToken}?user_id=$userId',
+    );
+
+    return json;
+  }
+
+  @override
+  Future<Response> getBooksByCategories() async {
+    final json = await _dio.get(ApiKeys.booksByCategories);
+    return json;
+  }
+
+  @override
+  Future<Response> getBookById(String id) async {
+    final json = await _dio.get('${ApiKeys.bookById}?book_id=$id');
+    return json;
+  }
+
+  @override
+  Future<Response> getBooksByCategoryId({required int id}) async {
+    final json = await _dio.get('${ApiKeys.booksByCategoryId}?category_id=$id');
+    return json;
+  }
+
+  @override
+  Future<Response> logout() async {
+    final json = await _dio.post(ApiKeys.logout);
+    return json;
+  }
+
+  @override
+  Future<Response> getBooksByQuery({required SearchRequestDto request}) async {
+    final json = await _dio.get(
+      '${ApiKeys.booksByQuery}?query=${request.query}',
+    );
+    return json;
+  }
+
+  @override
+  Future<Response> googleAuth() async {
+    final json = await _dio.get(ApiKeys.googleAuth);
+    return json;
+  }
+
+  @override
+  Future<Response> getNewBooks() async {
+    final json = await _dio.get(ApiKeys.newBooks);
+    return json;
   }
 }

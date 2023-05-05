@@ -1,8 +1,9 @@
-
-export 'package:torys/ui_kit/index.dart';
+export 'package:book_readers/ui_kit/index.dart';
 export 'package:injectable/injectable.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
-export 'core/presentation/router/bloc/bloc.dart';
-export 'core/presentation/router/router.dart';
-
-
+export 'package:auto_route/auto_route.dart';
+export 'package:book_readers/core/presentation/provider/provider.dart';
+export 'package:book_readers/core/presentation/widgets/base/base_scaffold.dart';
+export 'package:auto_route/annotations.dart';
+export 'package:book_readers/core/presentation/widgets/app_container.dart';
+export 'package:book_readers/utils/extentions/build_context_extension.dart';

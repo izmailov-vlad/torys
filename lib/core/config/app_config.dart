@@ -1,8 +1,4 @@
-import 'package:dio/dio.dart';
-import '../../injection/injection.dart';
-import '../data/data.dart';
-import 'api_keys.dart';
-
+part of core;
 class AppConfiguration {
   static final AppConfiguration instance = AppConfiguration._();
 
@@ -11,12 +7,15 @@ class AppConfiguration {
   AppConfiguration._();
 
   Future<void> initConfiguration() async {
-    final Dio dio = Dio(BaseOptions(
-      baseUrl: ApiKeys.baseUrl,
-      sendTimeout: const Duration(milliseconds: 10000),
-      connectTimeout: const Duration(milliseconds: 20000),
-      contentType: 'application/json',
-    ));
+    final Dio dio = Dio(
+      BaseOptions(
+        baseUrl: ApiKeys.baseUrl,
+        sendTimeout: const Duration(milliseconds: 10000),
+        connectTimeout: const Duration(milliseconds: 20000),
+        contentType: 'application/json',
+        responseType: ResponseType.json,
+      ),
+    );
 
     // final Dio tokenDio = Dio(BaseOptions(
     //   baseUrl: CoreConstants.baseUrl,
@@ -35,8 +34,11 @@ class AppConfiguration {
     /// interceptors
     /// ------------------------------------------------------------
     ///
-    dio.interceptors.add(AppInterceptor());
+    ///
+    final appDatabase = AppDatabase();
 
-    getIt.registerLazySingleton<Dio>(() => dio);
+    getIt.registerSingleton<Dio>(dio);
+    getIt.registerSingleton<AppDatabase>(appDatabase);
+    dio.interceptors.add(getIt.get<AppInterceptor>());
   }
 }

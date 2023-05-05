@@ -1,35 +1,86 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
-import '../../../models/book.dart';
-import '../../../../domain/domain.dart';
-import '../../../models/genre.dart';
-import 'state.dart';
-import 'event.dart';
+import '../../../../../utils/app_logger.dart';
+import '../../../presentation.dart';
+
+part 'state.dart';
+
+part 'event.dart';
+
+part 'bloc.freezed.dart';
 
 typedef _Emit = Emitter<HomeState>;
 
 @injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final GetGenresUseCase getGenresUseCase;
-  final GetPopularBooksUseCase getPopularBooksUseCase;
-
-  List<Genre>? genres = [];
-  List<Book>? books = [];
+  final GetCategoriesUseCase getCategoriesUseCase;
+  final GetPopularBooksUseCase _getPopularBooksUseCase;
+  final GetBooksByCategories _getBooksByCategories;
+  final GetBookByIdUseCase _getBookByIdUseCase;
+  final GetBooksByCategoryIdUseCase _getBooksByCategoryId;
+  final GetNewBooksUseCase _getNewBooksUseCase;
 
   HomeBloc(
-    this.getPopularBooksUseCase,
-    this.getGenresUseCase,
+    this._getPopularBooksUseCase,
+    this.getCategoriesUseCase,
+    this._getBooksByCategories,
+    this._getBookByIdUseCase,
+    this._getBooksByCategoryId,
+    this._getNewBooksUseCase,
   ) : super(const InitState()) {
     on<FetchEvent>(_fetch);
+    on<ChooseBookEvent>(_onChooseBook);
+    on<ShowAllEvent>(_showAll);
   }
 
   Future<void> _fetch(FetchEvent event, _Emit emit) async {
-    emit(const LoadingState());
-    genres = await getGenresUseCase();
-    books = await getPopularBooksUseCase();
-    emit(FetchedState(
-      genres: genres ?? [],
-      books: books ?? [],
-    ));
+    try {
+      emit(const LoadingState());
+      final categories = await getCategoriesUseCase(const NoParams());
+      // final books = await _getPopularBooksUseCase();
+      final newBooks = await _getNewBooksUseCase(const NoParams());
+
+      final booksByCategories = await _getBooksByCategories(const NoParams());
+
+      emit(FetchedState(
+        categories: categories ?? [],
+        books: [],
+        booksByCategories: booksByCategories ??
+            CategoriesBooksUIModel(
+              categoriesBooks: [],
+            ),
+        newBooks: newBooks?.items ?? [],
+      ));
+    } catch (error, stackTrace) {
+      ErrorHandler.catchError(
+        error,
+        stackTrace,
+        (error) {
+          emit(ErrorState(error));
+        },
+      );
+    }
+  }
+
+  Future<void> _showAll(ShowAllEvent event, _Emit emit) async {
+    final books = await _getBooksByCategoryId(
+      BooksByCategoryIdParams(event.categoryId),
+    );
+    if (books == null) return;
+    emit(HomeState.navigateToBooks(books: books));
+  }
+
+  Future<void> _onChooseBook(ChooseBookEvent event, _Emit emit) async {
+    try {
+      final book = await _getBookByIdUseCase(BookByIdParams(id: event.bookId));
+      if (book == null) return;
+      emit(NavigateToBookDetailState(book: book));
+    } catch (error, stackTrace) {
+      ErrorHandler.catchError(
+        error,
+        stackTrace,
+        (error) {
+          emit(ErrorState(error));
+        },
+      );
+    }
   }
 }

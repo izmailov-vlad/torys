@@ -1,8 +1,8 @@
 part of data;
 
-extension GenreExtension on GenreDto {
-  GenreModel toGenreModel() {
-    return GenreModel(
+extension GenreExtension on CategoryDto {
+  CategoryModel toGenreModel() {
+    return CategoryModel(
       id: id,
       name: name,
     );

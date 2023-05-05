@@ -1,63 +1,43 @@
 import '../../../../ui.dart';
-import '../../widgets/base/base_scaffold.dart';
-import '../favorite/favorite.dart';
-import '../home/home.dart';
-import '../profile/profile.dart';
-import 'bloc/bloc.dart';
-import 'bloc/event.dart';
-import 'bloc/state.dart';
+import '../../router/auto_router.gr.dart';
 
-class MainScreen extends StatefulWidget {
-  static const id = '/main';
-
+@RoutePage()
+class MainScreen extends StatelessWidget implements AutoRouteWrapper {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  final List<Widget> pages = const [
-    HomeScreen(
-      key: PageStorageKey<String>(HomeScreen.id),
-    ),
-    FavoriteScreen(
-      key: PageStorageKey<String>(FavoriteScreen.id),
-    ),
-    ProfileScreen(
-      key: PageStorageKey<String>(ProfileScreen.id),
-    ),
-  ];
-
-  late Widget currentPage;
-
-  final PageStorageBucket _bucket = PageStorageBucket();
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    currentPage = pages.first;
-  }
+  Widget wrappedRoute(BuildContext context) => AppProvider(child: this);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainBloc, MainState>(
-      buildWhen: (prev, curr) =>
-          curr is MainChangeScreenState || curr is MainInitState,
-      builder: (context, state) {
-        if (state is MainChangeScreenState) {
-          currentPage = pages[state.screenIndex];
-        } else {
-          currentPage = pages.first;
-        }
-
+    return AutoTabsRouter(
+      routes: const [
+        HomeScreenRoute(),
+        SearchScreenRoute(),
+        FavoriteScreenRoute(),
+        ProfileScreenRoute(),
+      ],
+      transitionBuilder: (context, child, animation) => FadeTransition(
+        opacity: animation,
+        child: child,
+      ),
+      builder: (context, child) {
+        final tabsRouter = AutoTabsRouter.of(context);
         return BaseScaffold(
           emptyTop: true,
+          body: child,
           bottomNavigationBar: BottomNavigationBar(
-            currentIndex: pages.indexOf(currentPage),
-            onTap: (index) => context.read<MainBloc>().add(ChangeScreen(index)),
+            currentIndex: tabsRouter.activeIndex,
+            onTap: (index) => tabsRouter.setActiveIndex(index),
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.favorite),
                 label: 'Favorite',
@@ -67,10 +47,6 @@ class _MainScreenState extends State<MainScreen> {
                 label: 'Profile',
               ),
             ],
-          ),
-          body: PageStorage(
-            bucket: _bucket,
-            child: currentPage,
           ),
         );
       },

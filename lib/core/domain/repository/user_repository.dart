@@ -1,10 +1,12 @@
 part of domain;
 
-abstract class UserRepository {
-  Future<Result<void>> login(String email, String password);
+abstract class AuthRepository {
+  Future<AuthModel?> login(AuthRequestDto authRequestDto);
 
-  Future<Result<void>> register(User user);
+  Future<RegisterModel?> register(RegisterRequestDto registerRequestDto);
 
-  void logout();
+  Future<RefreshTokenModel?> refreshToken(RefreshTokenRequestDto request);
+
+  Future<LogoutModel?> logout();
 }
 

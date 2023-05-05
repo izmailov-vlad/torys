@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:torys/injection/injection.config.dart';
+import 'injection.config.dart';
 
 import '../ui.dart';
 

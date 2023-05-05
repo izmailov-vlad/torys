@@ -9,16 +9,14 @@ class AuthorName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Text(
-        name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge
-            ?.withColor(AppColorsScheme.grey1),
-      ),
+    return Text(
+      name,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context)
+          .textTheme
+          .bodyLarge
+          ?.withColor(AppColorsScheme.grey1),
     );
   }
 }

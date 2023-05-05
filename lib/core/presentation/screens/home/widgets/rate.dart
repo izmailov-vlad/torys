@@ -18,7 +18,7 @@ class Rate extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(
           horizontal: AppPadding.mediumPadding.w,
-          vertical: AppPadding.smallPadding.h,
+          vertical: AppPadding.normalPadding.h,
         ),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
@@ -30,7 +30,7 @@ class Rate extends StatelessWidget {
           rate.toString(),
           style: Theme.of(context)
               .textTheme
-              .labelLarge
+              .bodyLarge
               ?.withColor(
             AppColorsScheme.white,
           )

@@ -1,6 +1,9 @@
-class User {
-  final String login;
-  final String password;
+part of presentation;
 
-  User({required this.login, required this.password});
+class UserUiModel {
+  final int id;
+  final String name;
+  final String email;
+
+  const UserUiModel({required this.id, required this.name, required this.email});
 }

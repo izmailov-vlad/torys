@@ -1,19 +1,21 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../models/book.dart';
-import '../../../models/genre.dart';
-
-part 'state.freezed.dart';
+part of 'bloc.dart';
 
 @freezed
 class HomeState with _$HomeState {
   const factory HomeState.init() = InitState;
 
   const factory HomeState.fetched({
-    required List<Genre> genres,
-    required List<Book> books,
+    required CategoriesBooksUIModel booksByCategories,
+    required List<CategoryUIModel> categories,
+    required List<BookUiModel> books,
+    required List<BookUiModel> newBooks,
   }) = FetchedState;
+
+  const factory HomeState.navigateToBookDetail({required BookUiModel book}) = NavigateToBookDetailState;
+
+  const factory HomeState.navigateToBooks({required BooksUiModel books}) = NavigateToBooksState;
 
   const factory HomeState.loading() = LoadingState;
 
-  const factory HomeState.error() = ErrorState;
+  const factory HomeState.error(BaseError error) = ErrorState;
 }

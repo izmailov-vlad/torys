@@ -1,16 +1,32 @@
 part of data;
 
+@Injectable()
 class AppInterceptor extends InterceptorsWrapper {
+  final AppSecureStorage _appSecureStorage;
+  final RefreshTokenUseCase _refreshTokenUseCase;
+  final Dio _dio;
+
+  AppInterceptor(
+    this._appSecureStorage,
+    this._refreshTokenUseCase,
+    this._dio,
+  );
+
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
     if (err.response != null) {
-      AppLogger.logResponse(err.response!);
+      AppLogger.logError(
+          error: err, message: err.message!, stackTrace: err.stackTrace);
     }
 
     String errMessage = 'Unknown Error';
     if (err.response?.data != null) {
-      errMessage =
-          (err.response?.data as Map<dynamic, dynamic>)['data']['message'];
+      if (err.response?.data is Map<dynamic, dynamic>) {
+        errMessage =
+            (err.response?.data as Map<dynamic, dynamic>)['data']['message'];
+      } else {
+        errMessage = (err.response?.data as String);
+      }
     }
 
     switch (err.response?.statusCode) {
@@ -28,6 +44,27 @@ class AppInterceptor extends InterceptorsWrapper {
         super.onError(
             Unauthorized(err.requestOptions, err.response, errMessage),
             handler);
+
+        try {
+          final token = await _refreshTokenUseCase();
+
+          await _appSecureStorage.write(key: 'token', value: token);
+
+          if (token != null && token.isNotEmpty) {
+            RequestOptions options =
+                err.response?.requestOptions ?? err.requestOptions;
+            options.headers = ({'Authorization': 'Bearer $token'});
+
+            await _dio.fetch(options).then(handler.resolve);
+
+            return;
+          }
+        } on DioError catch (err) {
+          handler.reject(err);
+        } catch (error) {
+          rethrow;
+        }
+
         break;
       case 404:
         super.onError(
@@ -69,8 +106,18 @@ class AppInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+  Future<void> onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
     AppLogger.logRequest(options);
+    String? token = await _appSecureStorage.getAccessToken();
+
+    // token =
+    //   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJiYWNrZW5kIiwiYXVkIjoibnV4dC1sayIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNjc3ODQ3NTcxLCJuYmYiOjE2Nzc4NDc1NzEsImV4cCI6MTY4MDQzOTU3MSwidWlkIjoyOSwiYXV0aF9rZXkiOiJyXzctWVJJZnIwV1dKR05rc0EtV1hIT0dLQWR5SHZkSSJ9.66H14HC_SPeYInX-kzWgY-AWSOHQ2M-8cQqT8kJsvYE';
+
+    if (token != null && token.isNotEmpty) {
+      options.headers.putIfAbsent('Authorization', () => 'Bearer $token');
+    }
+
     return handler.next(options);
   }
 

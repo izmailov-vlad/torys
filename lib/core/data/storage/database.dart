@@ -1,58 +1,76 @@
-import 'package:hive/hive.dart';
+part of data;
 
-import 'package:injectable/injectable.dart';
+// For more information on using drift, please see https://drift.simonbinder.eu/docs/getting-started/
+// A full cross-platform example is available here: https://github.com/simolus3/drift/tree/develop/examples/app
 
-part 'database.g.dart';
+class Users extends Table {
+  IntColumn get id => integer().autoIncrement()();
 
-abstract class DatabaseStorage {
-  Favourites? favourites;
-  String? token;
-  Future<int> clear();
+  TextColumn get email => text()();
+
+  TextColumn get name => text()();
 }
 
-@Injectable(as: DatabaseStorage)
-class DatabaseStorageHive implements DatabaseStorage {
-  static const _hiveBoxName = 'user';
-  static const _favourites = 'favourites';
-  static const _token = 'token';
-  static Future init() async {
-    await Hive.openBox(_hiveBoxName);
-  }
+class CategoryBooks extends Table {
+  IntColumn get id => integer().autoIncrement()();
 
-  @override
-  Future<int> clear() async {
-    var result = await _hiveBox.clear();
-    return result;
-  }
-
-  Box get _hiveBox => Hive.box(_hiveBoxName);
-
-  @override
-  Favourites? get favourites {
-    return _hiveBox.get(_favourites);
-  }
-
-  @override
-  set favourites(Favourites? favourites) {
-    _hiveBox.put(_favourites, favourites);
-  }
-
-  @override
-  String? get token {
-    var token = _hiveBox.get(_token);
-    return token;
-  }
-
-  @override
-  set token(String? token) {
-    _hiveBox.put(_token, token);
-  }
+  TextColumn get name => text()();
 }
 
-@HiveType(typeId: 0)
-class Favourites extends HiveObject {
-  @HiveField(0)
-  List<String> favouriteIds;
+@DriftDatabase(tables: [Users, CategoryBooks])
+class AppDatabase extends _$AppDatabase {
+  AppDatabase() : super(_openConnection());
 
-  Favourites(this.favouriteIds);
+  @override
+  int get schemaVersion => 1;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (m) async {
+        await m.createAll();
+      },
+      onUpgrade: (migrator, from, to) async {
+        if(from == 1) {
+          await migrator.createTable(categoryBooks);
+        }
+      }
+    );
+  }
+
+  Future<void> deleteUser() async {
+    await delete(users).go();
+  }
+
+  Future<User?> getUser() => select(users).getSingleOrNull();
+
+  Future<List<CategoryBook>?> getCategories() => select(categoryBooks).get();
+
+  Future<void> insertCategories(
+    List<CategoryBooksCompanion> categoriesCompanion,
+  ) async =>
+      await batch(
+        (batch) => batch.insertAll(
+          categoryBooks,
+          categoriesCompanion,
+        ),
+      );
+
+  Future<void> insertUser(
+    UsersCompanion usersCompanion,
+  ) async =>
+      into(users).insert(
+        usersCompanion,
+      );
+}
+
+LazyDatabase _openConnection() {
+  // the LazyDatabase util lets us find the right location for the file async.
+  return LazyDatabase(() async {
+    // put the database file, called db.sqlite here, into the documents folder
+    // for your app.
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    return NativeDatabase.createInBackground(file);
+  });
 }

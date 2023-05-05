@@ -64,11 +64,31 @@ abstract class AppTheme {
           ),
         ),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          unselectedItemColor: AppColorsScheme.grey1,
+          selectedItemColor: AppColorsScheme.mainColor,
+          showUnselectedLabels: true),
       shadowColor: AppColorsScheme.shadowColor,
-      appBarTheme: AppBarTheme(shadowColor: Colors.transparent),
-      cardTheme: CardTheme(
+      appBarTheme: const AppBarTheme(
         shadowColor: Colors.transparent,
+        backgroundColor: AppColorsScheme.white
+      ),
+      cardTheme: const CardTheme(
+        shadowColor: Colors.transparent,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        labelStyle: AppTextTheme.titleLarge.copyWith(
+          color: AppColorsScheme.red,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        errorStyle: AppTextTheme.titleLarge.copyWith(
+          color: AppColorsScheme.red,
+        ),
+        hintStyle: AppTextTheme.titleLarge.copyWith(
+          color: AppColorsScheme.black.withOpacity(0.25),
+        ),
       ),
     );
   }

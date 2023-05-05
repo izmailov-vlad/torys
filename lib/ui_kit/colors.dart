@@ -18,7 +18,7 @@ abstract class AppColorsScheme {
     );
   }
 
-  static const mainColor = Color(0xFFDAA964);
+  static const mainColor = Color(0xFFDA8964);
   static const main1 = Color(0xFFEDC58C);
   static const main4 = Color(0xFFFBF6EF);
   static const secondaryColor = Color(0xFFDA8964);

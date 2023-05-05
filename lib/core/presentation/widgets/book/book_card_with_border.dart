@@ -3,13 +3,15 @@ import 'package:sizer/sizer.dart';
 import '../../../../ui.dart';
 import '../../screens/home/widgets/author_name.dart';
 import '../../screens/home/widgets/book_title.dart';
+import '../base/base_container.dart';
+import '../base/base_image.dart';
 
 class BookCardWithBorder extends StatelessWidget {
-  final int id;
+  final String id;
   final String image;
   final String bookTitle;
   final String authorName;
-  final Function({required int bookId}) onTap;
+  final Function({required String bookId}) onTap;
 
   const BookCardWithBorder({
     Key? key,
@@ -22,44 +24,47 @@ class BookCardWithBorder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      semanticContainer: false,
-      borderOnForeground: false,
-      child: SizedBox(
-        width: 27.w,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(AppPadding.mediumPadding),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2,
+    return GestureDetector(
+      onTap: () => onTap(bookId: id),
+      child: Card(
+        margin: EdgeInsets.zero,
+        semanticContainer: false,
+        borderOnForeground: false,
+        child: SizedBox(
+          width: 27.w,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppContainer(
+                padding: const EdgeInsets.all(AppPadding.mediumPadding),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 2,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(AppRadius.mainRadius),
+                  ),
                 ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(13),
+                child: BaseImage(
+                  imageType: ImageType.network,
+                  imagePath: image,
                 ),
               ),
-              child: Image.asset(
-                AppImages.book,
-
-                fit: BoxFit.contain,
+              Padding(
+                padding: EdgeInsets.only(
+                  top: AppPadding.smallPadding.h,
+                  left: AppPadding.smallPadding.w,
+                ),
+                child: BookTitle(title: bookTitle),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: AppPadding.smallPadding.h,
-                left: AppPadding.smallPadding.w,
+              Padding(
+                padding: EdgeInsets.only(left: AppPadding.smallPadding.w),
+                child: AuthorName(name: authorName),
               ),
-              child: BookTitle(title: bookTitle),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: AppPadding.smallPadding.w),
-              child: AuthorName(name: authorName),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

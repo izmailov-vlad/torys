@@ -6,29 +6,31 @@ import '../../../ui_kit/shadows.dart';
 
 class BookGenre extends StatelessWidget {
   final String name;
+  final VoidCallback onTap;
 
-  const BookGenre({Key? key, required this.name}) : super(key: key);
+  const BookGenre({Key? key, required this.name, required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AppContainer(
+      onTap: onTap,
       padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 3.w),
       margin: EdgeInsets.symmetric(vertical: 0.5.h),
-      decoration: const BoxDecoration(
-        color: AppColorsScheme.mainColor,
+      decoration: BoxDecoration(
+        color: AppColorsScheme.white,
         boxShadow: AppShadows.mainShadow,
+        border: Border.all(color: Theme.of(context).primaryColor),
         borderRadius: BorderRadius.all(
           Radius.circular(AppRadius.secondaryRadius),
         ),
       ),
-      child: Center(
-        child: Text(
-          name,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.withColor(AppColorsScheme.white),
-        ),
+      child: Text(
+        name,
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge
+            ?.withColor(AppColorsScheme.mainColor),
       ),
     );
   }
