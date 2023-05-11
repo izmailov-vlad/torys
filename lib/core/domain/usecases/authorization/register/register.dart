@@ -22,7 +22,7 @@ class RegisterUseCase implements UseCase<RegisterUI?, RegisterParams> {
       ),
     );
     if (result == null) return null;
-    await _appSecureStorage.setSuccessToken(result.token);
+    await _appSecureStorage.setAccessToken(result.token);
     await _appDatabase.insertUser(result.user.toCompanion());
     return result.toRegister();
   }

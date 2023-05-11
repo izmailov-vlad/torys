@@ -9,10 +9,12 @@ class VolumeInfoDto {
   final List<String>? categories;
   final String? description;
   final int? pageCount;
+  final double? averageRating;
 
   VolumeInfoDto({
     required this.imageLinks,
     required this.subtitle,
+    required this.averageRating,
     required this.authors,
     required this.title,
     required this.categories,

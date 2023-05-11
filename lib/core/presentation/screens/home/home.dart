@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
           context.router.push(BooksPageRoute(books: state.books));
         }
         if (state is NavigateToBookDetailState) {
-          context.router.push(BookDetailPageRoute(book: state.book));
+          context.router.push(BookDetailPageRoute(bookId: state.book.id));
         }
       },
       builder: (context, state) => state.maybeWhen(
@@ -48,10 +48,6 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: AppPadding.largePadding.w, bottom: AppPadding.mediumPadding.h),
-                      child: BaseText(title: 'Новинки', style: context.theme.textTheme.headlineLarge?.toBold()),
-                    ),
                     BookCards(
                       books: newBooks,
                       onTap: ({required String bookId}) {
@@ -79,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                         title: 'Показать все',
                         style: Theme.of(context)
                             .textTheme
-                            .headlineLarge
+                            .titleLarge
                             ?.toBold()
                             .withColor(AppColorsScheme.mainColor),
                         onTap: () {

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "421108962094",
+    "project_id": "torys-bd3f8",
+    "storage_bucket": "torys-bd3f8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421108962094:android:3b7041cead7cd87d48a0bf",
+        "android_client_info": {
+          "package_name": "com.book.book_readers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421108962094-op02igq2l5ir1406eo96suk4oqb8o338.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs_-GSROeRK0ZxRicoISyQH1X_cjFMXhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421108962094-n6at1b4bhosgq4jfs8kek0d4p6u6giea.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "421108962094-5cgj30f0au9iq8hdn82kl1hin3cmnnb2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.torys"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

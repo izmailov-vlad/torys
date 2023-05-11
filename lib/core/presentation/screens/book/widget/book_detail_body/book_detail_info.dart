@@ -1,13 +1,15 @@
-import '../../../../../../ui.dart';
+import '../../../../presentation.dart';
 
 class BookDetailInfo extends StatelessWidget {
-  final String title;
   final String value;
+  final String title;
+  final String iconPath;
 
   const BookDetailInfo({
     Key? key,
-    required this.title,
     required this.value,
+    required this.title,
+    required this.iconPath,
   }) : super(key: key);
 
   @override
@@ -24,13 +26,28 @@ class BookDetailInfo extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineLarge,
+          Column(
+            children: [
+              Row(
+                children: [
+                  BaseImage(
+                    imageType: ImageType.asset,
+                    imagePath: iconPath,
+                    height: 16,
+                    width: 16,
+                  ),
+                  SizedBox(width: AppMargin.mediumMargin.w),
+                  BaseText(
+                    title: value,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                ],
+              ),
+            ],
           ),
           SizedBox(height: 4),
           Text(
-            value,
+            title,
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge

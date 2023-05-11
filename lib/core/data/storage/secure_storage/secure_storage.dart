@@ -11,7 +11,7 @@ abstract class AppSecureStorage {
 
   Future<String?> getAccessToken();
 
-  Future<void> setSuccessToken(String token);
+  Future<void> setAccessToken(String token);
 
   Future<void> clearToken();
 }
@@ -43,7 +43,7 @@ class AppSecureStorageImpl implements AppSecureStorage {
   }
 
   @override
-  Future<void> setSuccessToken(String token) async {
+  Future<void> setAccessToken(String token) async {
     await _flutterSecureStorage.write(key: 'token', value: token);
   }
 }

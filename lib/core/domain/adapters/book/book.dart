@@ -1,4 +1,5 @@
 part of domain;
+
 extension BookExtension on BookModel {
   BookUiModel toUiModel() {
     return BookUiModel(
@@ -8,8 +9,12 @@ extension BookExtension on BookModel {
       pageCount: pageCount,
       categories: categories,
       authors: authors,
-      imageLinks: imageLinks,
       volumeInfo: volumeInfo.toVolumeInfo(),
+      accessInfo: accessInfo.toUiModel(),
+      isFavorite: isFavorite,
+      comments: comments.map((e) => e.toUiModel()).toList(),
+      likesCount: likesCount,
+      rate: rate,
     );
   }
 }

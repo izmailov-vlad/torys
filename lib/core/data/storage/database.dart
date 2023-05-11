@@ -1,4 +1,4 @@
-part of data;
+part of database;
 
 // For more information on using drift, please see https://drift.simonbinder.eu/docs/getting-started/
 // A full cross-platform example is available here: https://github.com/simolus3/drift/tree/develop/examples/app
@@ -26,16 +26,13 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration {
-    return MigrationStrategy(
-      onCreate: (m) async {
-        await m.createAll();
-      },
-      onUpgrade: (migrator, from, to) async {
-        if(from == 1) {
-          await migrator.createTable(categoryBooks);
-        }
+    return MigrationStrategy(onCreate: (m) async {
+      await m.createAll();
+    }, onUpgrade: (migrator, from, to) async {
+      if (from == 1) {
+        await migrator.createTable(categoryBooks);
       }
-    );
+    });
   }
 
   Future<void> deleteUser() async {
@@ -59,9 +56,9 @@ class AppDatabase extends _$AppDatabase {
   Future<void> insertUser(
     UsersCompanion usersCompanion,
   ) async =>
-      into(users).insert(
-        usersCompanion,
-      );
+      batch((batch) => batch
+        ..deleteAll(users)
+        ..insert(users, usersCompanion));
 }
 
 LazyDatabase _openConnection() {

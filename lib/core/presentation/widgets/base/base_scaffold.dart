@@ -75,7 +75,7 @@ class BaseScaffold extends StatelessWidget {
                     action: action,
                     title: BaseText(
                       title: appBarTitle!,
-                      style: AppTextTheme.displayLarge,
+                      style: AppTextTheme.displayLarge.toBold(),
                     ),
                     automaticallyImplyLeading: automaticallyImplyLeading,
                     centerTitle: appBarCenterTitle,

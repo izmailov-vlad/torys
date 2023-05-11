@@ -17,11 +17,21 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   }
 
   Future<void> _checkAuth(_CheckAuthEvent event, _Emit emit) async {
-    final isAuth = await _checkAuthUseCase(const NoParams());
-    if (isAuth) {
-      emit(const LaunchState.navigateTo(NavigateToRoute.main));
-      return;
+    try {
+      final isAuth = await _checkAuthUseCase(const NoParams());
+      if (isAuth) {
+        emit(const LaunchState.navigateTo(NavigateToRoute.main));
+        return;
+      }
+      emit(const LaunchState.navigateTo(NavigateToRoute.auth));
+    } catch (error, stackTrace) {
+      ErrorHandler.catchError(
+        error,
+        stackTrace,
+        (error) {
+          emit(const LaunchState.navigateTo(NavigateToRoute.auth));
+        },
+      );
     }
-    emit(const LaunchState.navigateTo(NavigateToRoute.auth));
   }
 }

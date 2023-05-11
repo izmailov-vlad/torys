@@ -21,7 +21,7 @@ class RefreshTokenUseCaseImpl extends RefreshTokenUseCase {
         RefreshTokenRequestDto(user.id),
       );
       if (result == null) return null;
-      _appSecureStorage.setSuccessToken(result.token);
+      _appSecureStorage.setAccessToken(result.token);
       return result.token;
     }
 

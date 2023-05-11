@@ -9,20 +9,17 @@ import 'package:json_annotation/json_annotation.dart';
 
 /// CORE
 import '../core.dart';
+
 /// DOMAIN
 import '../domain/domain.dart';
 
 /// db
 import 'storage/secure_storage/secure_storage.dart';
-import 'dart:io';
-import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
-
-part 'storage/database.dart';
 
 /// DTO
+
+part 'network/dto/default.dart';
+
 part 'network/dto/user/user.dart';
 
 part 'network/dto/search_params/pagination.dart';
@@ -37,6 +34,8 @@ part 'network/dto/google_auth/response/google_auth.dart';
 
 part 'network/dto/auth/response/auth.dart';
 
+part 'network/dto/auth/request/google_auth.dart';
+
 part 'network/dto/logout/logout.dart';
 
 part 'network/dto/register/request/register.dart';
@@ -48,6 +47,20 @@ part 'network/dto/refresh/request/refresh.dart';
 part 'network/dto/refresh/response/refresh.dart';
 
 part 'network/dto/book/book.dart';
+
+part 'network/dto/book/comment.dart';
+
+part 'network/dto/book/comments.dart';
+
+part 'network/dto/book/request/add_comment.dart';
+
+part 'network/dto/book/request/change_like_status.dart';
+
+part 'network/dto/book/request/get_comments.dart';
+
+part 'network/dto/book/request/rate_book.dart';
+
+part 'network/dto/book/access_info.dart';
 
 part 'network/dto/book/books.dart';
 
@@ -79,6 +92,8 @@ part 'network/app_client.dart';
 
 part 'network/interceptor.dart';
 
+part 'network/interceptor_without_token.dart';
+
 /// REPOSITORY
 part 'repository/books.dart';
 
@@ -97,7 +112,15 @@ part 'adapters/book/books.dart';
 
 part 'adapters/book/categories_books.dart';
 
+part 'adapters/book/access_info.dart';
+
+part 'adapters/book/comments.dart';
+
+part 'adapters/book/comment.dart';
+
 part 'adapters/book/image_links.dart';
+
+part 'adapters/user/user.dart';
 
 part 'adapters/authorization/auth.dart';
 
@@ -110,4 +133,3 @@ part 'adapters/authorization/logout.dart';
 part 'adapters/authorization/refresh_token.dart';
 
 part 'adapters/genre.dart';
-

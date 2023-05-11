@@ -1,8 +1,5 @@
 part of domain;
 
-/// user is unauthorized is FALSE
-/// user is authorized is TRUE
-
 @Injectable()
 class CheckAuthUseCase implements UseCase<bool, NoParams> {
   final AuthRepository _userRepository;
@@ -23,7 +20,7 @@ class CheckAuthUseCase implements UseCase<bool, NoParams> {
         RefreshTokenRequestDto(user.id),
       );
       if (result == null) return false;
-      _appSecureStorage.setSuccessToken(result.token);
+      _appSecureStorage.setAccessToken(result.token);
       return true;
     }
     return false;

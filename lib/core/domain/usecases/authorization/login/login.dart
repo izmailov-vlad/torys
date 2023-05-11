@@ -19,7 +19,7 @@ class LogInUseCase implements UseCase<AuthUI?, LoginParams> {
       params.password,
     ));
     if (result == null) return null;
-    await _appSecureStorage.setSuccessToken(result.token);
+    await _appSecureStorage.setAccessToken(result.token);
     await _appDatabase.insertUser(result.user.toCompanion());
     final authResult = result.toAuth();
 

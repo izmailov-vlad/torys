@@ -9,10 +9,12 @@ extension BookExtension on BookDto {
       pageCount: volumeInfo.pageCount ?? 0,
       authors: volumeInfo.authors ?? [],
       categories: volumeInfo.categories ?? [],
-      imageLinks: volumeInfo.imageLinks != null
-          ? [volumeInfo.imageLinks!.smallThumbnail]
-          : [],
       volumeInfo: volumeInfo.toModel(),
+      accessInfo: accessInfo.toModel(),
+      isFavorite: isFavorite,
+      comments: comments?.map((e) => e.toModel()).toList() ?? [],
+      likesCount: likesCount ?? 0,
+      rate: rate ?? 0,
     );
   }
 }

@@ -26,8 +26,7 @@ class ProfileScreen extends StatelessWidget implements AutoRouteWrapper {
         listener: (context, state) {
           state.maybeWhen(
             logout: () {
-              context.router.popUntilRoot();
-              context.router.push(const AuthorizationScreenRoute());
+              context.router.replace(const AuthorizationScreenRoute());
             },
             orElse: () => AppLogger.log(message: 'unknown event'),
           );
@@ -47,7 +46,10 @@ class ProfileScreen extends StatelessWidget implements AutoRouteWrapper {
                     child: Column(
                       children: [
                         const ProfileStatistics(),
-                        const ProfileItemPage(title: 'Настройки'),
+                        ProfileItemPage(
+                          title: 'Настройки',
+                          onTap: () {},
+                        ),
                         BaseButton(
                           onPressed: () => context
                               .read<ProfileBloc>()

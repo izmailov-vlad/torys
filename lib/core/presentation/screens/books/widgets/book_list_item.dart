@@ -7,7 +7,7 @@ class BookListItem extends StatelessWidget {
   final String author;
   final int publishYear;
   final String description;
-  final String imageUrl;
+  final String? imageUrl;
   final bool isFavorite;
   final VoidCallback onFavoriteTap;
   final VoidCallback onTap;
@@ -18,7 +18,7 @@ class BookListItem extends StatelessWidget {
     required this.author,
     required this.publishYear,
     required this.description,
-    required this.imageUrl,
+    this.imageUrl,
     required this.isFavorite,
     required this.onFavoriteTap,
     required this.onTap,
@@ -41,9 +41,9 @@ class BookListItem extends StatelessWidget {
             children: [
               BaseImage(
                 imageType:
-                    imageUrl.isNotEmpty ? ImageType.network : ImageType.asset,
+                    imageUrl != null ? ImageType.network : ImageType.asset,
                 imagePath:
-                    imageUrl.isNotEmpty ? imageUrl : AppImages.bookPlaceholder,
+                    imageUrl != null ? imageUrl! : AppImages.bookPlaceholder,
                 height: 150,
               ),
               SizedBox(width: AppMargin.mediumMargin.w),

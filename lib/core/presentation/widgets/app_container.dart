@@ -7,7 +7,13 @@ class AppContainer extends StatelessWidget {
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final bool withBorder;
+  final bool withShadow;
+  final Color? borderColor;
   final BoxDecoration? decoration;
+  final Color? fillColor;
+  final double? width;
+  final double? height;
+  final List<BoxShadow>? boxShadow;
 
   const AppContainer({
     Key? key,
@@ -18,19 +24,40 @@ class AppContainer extends StatelessWidget {
     this.withBorder = false,
     this.margin,
     this.decoration,
+    this.borderColor,
+    this.fillColor,
+    this.width,
+    this.height,
+    this.withShadow = false,
+    this.boxShadow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final widget = Container(
+      width: width,
+      height: height,
       padding: padding,
       margin: margin,
       decoration: decoration ??
           BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: fillColor ?? Theme.of(context).colorScheme.surface,
+            boxShadow: boxShadow != null
+                ? boxShadow
+                : withShadow
+                    ? [
+                        BoxShadow(
+                          offset: Offset(0, 0),
+                          color: AppColorsScheme.grey3,
+                          blurRadius: 8,
+                          spreadRadius: 4,
+                        )
+                      ]
+                    : null,
             border: withBorder
                 ? Border.all(
                     width: 1,
+                    color: borderColor ?? const Color(0xFF000000),
                   )
                 : null,
             borderRadius: borderRadius ??
@@ -41,11 +68,9 @@ class AppContainer extends StatelessWidget {
       child: child,
     );
     return onTap != null
-        ? Material(
-            child: InkWell(
-              onTap: onTap,
-              child: widget,
-            ),
+        ? GestureDetector(
+            onTap: onTap,
+            child: widget,
           )
         : widget;
   }

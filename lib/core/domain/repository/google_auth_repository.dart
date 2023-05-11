@@ -1,5 +1,5 @@
 part of domain;
 
 abstract class GoogleAuthRepository {
-  Future<GoogleAuthModel?> login();
+  Future<GoogleAuthModel?> login({required GoogleAuthRequestDto request});
 }

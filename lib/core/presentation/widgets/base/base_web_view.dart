@@ -95,7 +95,7 @@ Page resource error:
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      emptyTop: true,
+      appBarTitle: 'Назад',
       body: WebViewWidget(
         controller: _webViewController,
       ),

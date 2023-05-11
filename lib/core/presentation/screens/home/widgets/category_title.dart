@@ -14,8 +14,6 @@ class CategoryTitle extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
         left: AppPadding.largePadding.w,
-        top: 3.0.h,
-        bottom: 3.0.h,
       ),
       child: Text(
         title,

@@ -1,7 +1,7 @@
 part of presentation;
 
 class GoogleAuthUiModel {
-  final String url;
+  final String accessToken;
 
-  GoogleAuthUiModel({required this.url});
+  const GoogleAuthUiModel({required this.accessToken});
 }

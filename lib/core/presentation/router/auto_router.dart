@@ -1,4 +1,5 @@
 import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/src/route/route_config.dart';
 
 import 'auto_router.gr.dart';
@@ -15,6 +16,8 @@ class AppRouter extends $AppRouter {
   static const String searchScreen = 'search';
   static const String favoriteScreen = 'favorite';
   static const String profileScreen = 'profile';
+  static const String profileEditScreen = '/profile_edit';
+  static const String commentModal = 'commentModal';
 
   @override
   List<AutoRoute> get routes => [
@@ -39,6 +42,10 @@ class AppRouter extends $AppRouter {
           page: BaseWebViewRoute.page,
         ),
         AutoRoute(
+          page: ProfileEditScreenRoute.page,
+          path: profileEditScreen,
+        ),
+        AutoRoute(
           path: mainScreen,
           page: MainScreenRoute.page,
           children: [
@@ -48,7 +55,10 @@ class AppRouter extends $AppRouter {
             ),
             AutoRoute(path: searchScreen, page: SearchScreenRoute.page),
             AutoRoute(path: favoriteScreen, page: FavoriteScreenRoute.page),
-            AutoRoute(path: profileScreen, page: ProfileScreenRoute.page),
+            AutoRoute(
+              path: profileScreen,
+              page: ProfileScreenRoute.page,
+            ),
           ],
         ),
       ];

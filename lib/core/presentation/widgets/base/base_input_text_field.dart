@@ -1,4 +1,5 @@
 import '../../../../ui.dart';
+import '../../presentation.dart';
 
 class BaseInputTextField extends StatelessWidget {
   final String? initialValue;
@@ -7,7 +8,7 @@ class BaseInputTextField extends StatelessWidget {
   final Function(String value)? onChanged;
   final Function(String? value)? onSaved;
   final TextEditingController? controller;
-  final bool? isValid;
+  final bool isValid;
   final GlobalKey<FormState>? formKey;
   final VoidCallback? onEditingComplete;
   final InputDecoration? inputDecoration;
@@ -16,6 +17,8 @@ class BaseInputTextField extends StatelessWidget {
   final bool? filled;
   final Color? fillColor;
   final Widget? suffixIcon;
+  final String? headTitle;
+  final String? initialText;
 
   const BaseInputTextField({
     Key? key,
@@ -25,31 +28,33 @@ class BaseInputTextField extends StatelessWidget {
     this.onChanged,
     this.onSaved,
     this.controller,
-    this.isValid,
+    this.isValid = true,
     this.formKey,
     this.prefixIcon,
     this.onEditingComplete,
     this.inputDecoration,
     this.withBorder = true,
     this.filled,
-    this.fillColor, this.suffixIcon,
+    this.fillColor,
+    this.suffixIcon,
+    this.headTitle,
+    this.initialText,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    Widget inputForm = Form(
       key: formKey,
       child: TextFormField(
         onSaved: onSaved,
         controller: controller,
-        cursorColor: isValid != null && isValid!
-            ? AppColorsScheme.mainColor
-            : AppColorsScheme.red,
+        cursorColor: isValid ? AppColorsScheme.mainColor : AppColorsScheme.red,
         onEditingComplete: onEditingComplete,
         validator: validator,
-        onChanged: (value) =>
-            onChanged!(value) ?? formKey?.currentState?.save(),
-        style: isValid != null && isValid!
+        onChanged: (value) => onChanged != null
+            ? onChanged!(value)
+            : formKey?.currentState?.save(),
+        style: isValid
             ? context.theme.textTheme.headlineLarge
             : context.theme.textTheme.headlineLarge
                 ?.copyWith(color: AppColorsScheme.red),
@@ -69,5 +74,22 @@ class BaseInputTextField extends StatelessWidget {
             ),
       ),
     );
+    if (headTitle != null && headTitle!.isNotEmpty) {
+      inputForm = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4.0),
+            child: BaseText(
+              title: headTitle!,
+              style: context.theme.textTheme.titleLarge,
+            ),
+          ),
+          SizedBox(height: AppMargin.superSmallMargin.h),
+          inputForm,
+        ],
+      );
+    }
+    return inputForm;
   }
 }

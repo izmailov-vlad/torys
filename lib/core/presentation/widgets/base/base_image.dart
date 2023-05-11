@@ -1,4 +1,5 @@
 import '../../../../ui.dart';
+import '../../presentation.dart';
 
 enum ImageType {
   asset,
@@ -10,6 +11,10 @@ class BaseImage extends StatelessWidget {
   final String imagePath;
   final double? height;
   final double? width;
+  final double? radius;
+  final BoxFit? fit;
+  final Color? color;
+  final VoidCallback? onTap;
 
   const BaseImage({
     Key? key,
@@ -17,19 +22,50 @@ class BaseImage extends StatelessWidget {
     required this.imagePath,
     this.height,
     this.width,
+    this.radius,
+    this.fit,
+    this.color,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    switch (imageType) {
-      case ImageType.asset:
-        return Image.asset(imagePath, fit: BoxFit.fill);
-      case ImageType.network:
-        return Image.network(
-          imagePath,
-          height: height,
-          width: width,
-        );
+    late Widget image;
+    if (imageType == ImageType.asset) {
+      image = Image.asset(
+        imagePath.isNotEmpty ? imagePath : AppImages.book,
+        color: color,
+        height: height,
+        width: width,
+        fit: BoxFit.fill,
+      );
+    } else {
+      image = imagePath.isNotEmpty
+          ? Image.network(
+              imagePath,
+              fit: fit,
+              height: height,
+              width: width,
+            )
+          : Image.asset(
+              AppImages.bookPlaceholder,
+              color: color,
+              height: height ?? 25.h,
+              width: width ?? 35.w,
+              fit: BoxFit.fill,
+            );
     }
+    if (onTap != null) {
+      image = GestureDetector(
+        onTap: onTap,
+        child: image,
+      );
+    }
+    return radius != null
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(radius!),
+            child: image,
+          )
+        : image;
   }
 }

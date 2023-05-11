@@ -6,6 +6,8 @@ extension VolumeInfoExtension on VolumeInfoDto {
       subtitle: subtitle ?? '',
       authors: authors ?? [],
       title: title,
+      averageRating: averageRating ?? 0,
+      imageLinks: imageLinks?.toModel(),
     );
   }
 }

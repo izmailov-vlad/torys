@@ -8,7 +8,7 @@ import '../base/base_image.dart';
 
 class BookCardWithBorder extends StatelessWidget {
   final String id;
-  final String image;
+  final String? image;
   final String bookTitle;
   final String authorName;
   final Function({required String bookId}) onTap;
@@ -16,7 +16,7 @@ class BookCardWithBorder extends StatelessWidget {
   const BookCardWithBorder({
     Key? key,
     required this.id,
-    required this.image,
+    this.image,
     required this.bookTitle,
     required this.authorName,
     required this.onTap,
@@ -31,7 +31,7 @@ class BookCardWithBorder extends StatelessWidget {
         semanticContainer: false,
         borderOnForeground: false,
         child: SizedBox(
-          width: 27.w,
+          width: 22.w,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,8 +48,12 @@ class BookCardWithBorder extends StatelessWidget {
                   ),
                 ),
                 child: BaseImage(
-                  imageType: ImageType.network,
-                  imagePath: image,
+                  imageType:
+                      image != null ? ImageType.network : ImageType.asset,
+                  imagePath: image ?? AppImages.bookPlaceholder,
+                  radius: 10,
+                  width: 20.w,
+                  height: 15.h,
                 ),
               ),
               Padding(

@@ -1,9 +1,11 @@
 part of domain;
 
 class GoogleAuthModel {
-  final String url;
+  final String accessToken;
+  final UserModel user;
 
   GoogleAuthModel({
-    required this.url,
+    required this.accessToken,
+    required this.user,
   });
 }

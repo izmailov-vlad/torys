@@ -7,8 +7,8 @@ class GoogleAuthRepositoryImpl extends GoogleAuthRepository {
   GoogleAuthRepositoryImpl(this._googleAuthService);
 
   @override
-  Future<GoogleAuthModel?> login() async {
-    final result = await _googleAuthService.auth();
+  Future<GoogleAuthModel?> login({required GoogleAuthRequestDto request}) async {
+    final result = await _googleAuthService.auth(request: request);
     return result?.toModel();
   }
 }

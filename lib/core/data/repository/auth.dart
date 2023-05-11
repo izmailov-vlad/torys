@@ -9,10 +9,7 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<AuthModel?> login(AuthRequestDto authRequestDto) async {
     final result = await _authService.authorize(authRequestDto);
-    if (result == null) return null;
-
-    final authModel = result.toModel();
-    return authModel;
+    return result?.toModel();
   }
 
   @override
@@ -31,7 +28,8 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<RefreshTokenModel?> refreshToken(RefreshTokenRequestDto request) async {
+  Future<RefreshTokenModel?> refreshToken(
+      RefreshTokenRequestDto request) async {
     final result = await _authService.refreshToken(request);
     if (result == null) return null;
 

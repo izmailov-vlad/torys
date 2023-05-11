@@ -32,19 +32,20 @@ class BooksPage extends StatelessWidget {
                   ),
                   child: BookListItem(
                     title: books.items[index].title,
-                    author: books.items[index].authors.isNotEmpty ? books.items[index].authors.first : '',
+                    author: books.items[index].authors.isNotEmpty
+                        ? books.items[index].authors.first
+                        : '',
                     publishYear: 2022,
                     description: books.items[index].description,
-                    imageUrl: books.items[index].imageLinks.isNotEmpty
-                        ? books.items[index].imageLinks.first
-                        : '',
+                    imageUrl:
+                        books.items[index].volumeInfo.imageLinks?.image,
                     isFavorite: false,
                     onFavoriteTap: () => context.read<BooksBloc>().add(
                           BooksEvent.onFavoriteTap(id: books.items[index].id),
                         ),
                     onTap: () {
                       context.router.push(
-                        BookDetailPageRoute(book: books.items[index]),
+                        BookDetailPageRoute(bookId: books.items[index].id),
                       );
                     },
                   ),

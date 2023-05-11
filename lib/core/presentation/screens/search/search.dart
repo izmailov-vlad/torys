@@ -1,15 +1,9 @@
 import 'dart:async';
-
-import 'package:sizer/sizer.dart';
-
-import '../../../../ui.dart';
 import '../../../../utils/app_logger.dart';
 import '../../presentation.dart';
 import '../../router/auto_router.gr.dart';
 import '../../widgets/base/base_icon.dart';
 import '../../widgets/base/base_input_text_field.dart';
-import '../../widgets/base/base_loader.dart';
-import '../../widgets/base/base_title.dart';
 import '../books/widgets/book_list_item.dart';
 import 'bloc/bloc.dart';
 import 'book_search_bloc/bloc.dart';
@@ -193,14 +187,12 @@ class _SearchListView extends StatelessWidget {
                         : '',
                     publishYear: 2022,
                     description: books.items[index].description,
-                    imageUrl: books.items[index].imageLinks.isNotEmpty
-                        ? books.items[index].imageLinks.first
-                        : '',
+                    imageUrl: books.items[index].volumeInfo.imageLinks?.image,
                     isFavorite: false,
                     onFavoriteTap: () {},
                     onTap: () {
                       context.router.push(
-                        BookDetailPageRoute(book: books.items[index]),
+                        BookDetailPageRoute(bookId: books.items[index].id),
                       );
                     },
                   ),

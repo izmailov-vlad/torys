@@ -71,12 +71,15 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
     _Emit emit,
   ) async {
     try {
-      // final account = await _googleSignIn.signIn();
-      // AppLogger.log(message: account.toString());
-      final result = await _googleLoginUseCase(const NoParams());
+      final account = await _googleSignIn.signIn();
+      if (account == null) return;
+      final result = await _googleLoginUseCase(
+        GoogleLoginParams(
+          account: account,
+        ),
+      );
       if (result == null) return;
-      emit(AuthorizationState.googleAuthSuccess(url: result.url));
-
+      emit(const AuthorizationState.authSuccess());
     } catch (error, stackTrace) {
       ErrorHandler.catchError(
         error,

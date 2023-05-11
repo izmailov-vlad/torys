@@ -1,7 +1,7 @@
 part of data;
 
 abstract class GoogleAuthService {
-  Future<GoogleAuthResultDto?> auth();
+  Future<GoogleAuthResultDto?> auth({required GoogleAuthRequestDto request});
 
   Future<UserDto?> getUser();
 }
@@ -12,8 +12,8 @@ class GoogleAuthServiceImpl implements GoogleAuthService {
 
   GoogleAuthServiceImpl(this._apiClient);
   @override
-  Future<GoogleAuthResultDto?> auth() async {
-    final result = await _apiClient.googleAuth();
+  Future<GoogleAuthResultDto?> auth({required GoogleAuthRequestDto request}) async {
+    final result = await _apiClient.googleAuth(request: request);
     return GoogleAuthResultDto.fromJson(result.data);
   }
 

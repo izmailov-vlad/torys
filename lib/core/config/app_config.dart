@@ -1,4 +1,5 @@
 part of core;
+
 class AppConfiguration {
   static final AppConfiguration instance = AppConfiguration._();
 
@@ -7,7 +8,7 @@ class AppConfiguration {
   AppConfiguration._();
 
   Future<void> initConfiguration() async {
-    final Dio dio = Dio(
+    final Dio withTokenDio = Dio(
       BaseOptions(
         baseUrl: ApiKeys.baseUrl,
         sendTimeout: const Duration(milliseconds: 10000),
@@ -17,18 +18,15 @@ class AppConfiguration {
       ),
     );
 
-    // final Dio tokenDio = Dio(BaseOptions(
-    //   baseUrl: CoreConstants.baseUrl,
-    //   sendTimeout: 10000,
-    //   connectTimeout: 20000,
-    //   contentType: 'application/json',
-    // ));
-    // final Dio authDio = Dio(BaseOptions(
-    //   baseUrl: CoreConstants.baseUrl,
-    //   sendTimeout: 10000,
-    //   connectTimeout: 20000,
-    //   contentType: 'application/json',
-    // ))
+    final Dio withoutTokenDio = Dio(
+      BaseOptions(
+        baseUrl: ApiKeys.baseUrl,
+        sendTimeout: const Duration(milliseconds: 10000),
+        connectTimeout: const Duration(milliseconds: 20000),
+        contentType: 'application/json',
+        responseType: ResponseType.json,
+      ),
+    );
 
     ///-------------------------------------------------------------
     /// interceptors
@@ -36,9 +34,11 @@ class AppConfiguration {
     ///
     ///
     final appDatabase = AppDatabase();
-
-    getIt.registerSingleton<Dio>(dio);
+    getIt.registerSingleton<Dio>(withoutTokenDio,
+        instanceName: 'withoutTokenDio');
+    getIt.registerSingleton<Dio>(withTokenDio, instanceName: 'withTokenDio');
     getIt.registerSingleton<AppDatabase>(appDatabase);
-    dio.interceptors.add(getIt.get<AppInterceptor>());
+    withTokenDio.interceptors.add(getIt.get<AppInterceptor>());
+    withoutTokenDio.interceptors.add(getIt.get<WithoutTokenInterceptor>());
   }
 }

@@ -1,6 +1,7 @@
 import 'package:sizer/sizer.dart';
 
 import '../../../../../ui.dart';
+import '../../../router/auto_router.gr.dart';
 import '../../../widgets/app_container.dart';
 import '../../../widgets/base/base_image.dart';
 import '../../../widgets/base/base_title.dart';
@@ -27,40 +28,63 @@ class ProfileHeader extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child:
-                  ProfilePhoto(imagePath: AppImages.profilePersonPlaceholder),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    ProfilePhoto(
+                      imagePath: AppImages.profilePersonPlaceholder,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: AppContainer(
+                        fillColor: AppColorsScheme.secondary4,
+                        padding: EdgeInsets.all(4),
+                        borderRadius: BorderRadius.circular(30),
+                        withBorder: true,
+                        borderColor: context.theme.primaryColor,
+                        child: BaseImage(
+                          imageType: ImageType.asset,
+                          imagePath: AppImages.icEdit,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    BaseText(
+                      title: name,
+                      style:
+                          Theme.of(context).textTheme.headlineLarge?.toBold(),
+                    ),
+                    SizedBox(height: AppMargin.smallMargin.h),
+                    BaseText(
+                      title: email,
+                      style:
+                          Theme.of(context).textTheme.headlineLarge?.toBold(),
+                    ),
+                    SizedBox(height: AppMargin.smallMargin.h),
+                    AppContainer(
+                      onTap: () =>
+                          context.router.push(const ProfileEditScreenRoute()),
+                      padding: EdgeInsets.all(16),
+                      borderColor: context.theme.primaryColor,
+                      withBorder: true,
+                      child: BaseText(
+                        title: 'Редактировать профиль',
+                        style: context.theme.textTheme.headlineLarge?.withColor(
+                          AppColorsScheme.mainColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BaseText(
-                    title: name,
-                    style: Theme.of(context).textTheme.headlineLarge?.toBold(),
-                  ),
-                  SizedBox(height: AppMargin.smallMargin.h),
-                  BaseText(
-                    title: email,
-                    style: Theme.of(context).textTheme.headlineLarge?.toBold(),
-                  ),
-                  SizedBox(height: AppMargin.smallMargin.h),
-                  // Row(
-                  //   children: [
-                  //     BaseText(
-                  //       title: 'ID 37373737',
-                  //       style: Theme.of(context).textTheme.headlineLarge,
-                  //     ),
-                  //     SizedBox(width: AppMargin.smallMargin.w),
-                  //     BaseImage(
-                  //       imageType: ImageType.asset,
-                  //       imagePath: AppImages.contentCopy,
-                  //     )
-                  //   ],
-                  // ),
-                ],
-              ),
-            )
           ],
         ),
       ),

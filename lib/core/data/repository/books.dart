@@ -52,4 +52,46 @@ class BooksRepositoryImpl extends BooksRepository {
     final booksByQuery = await booksService.getNewBooks();
     return booksByQuery?.toModel();
   }
+
+  @override
+  Future<bool?> changeBookFavorite({required String id}) async {
+    final book = await booksService.changeFavorite(id: id);
+    return book?.success;
+  }
+
+  @override
+  Future<bool?> addComment(
+      {required AddCommentRequestDto request, required String bookId}) async {
+    final book =
+        await booksService.addComment(bookId: bookId, request: request);
+    return book?.success;
+  }
+
+  @override
+  Future<List<CommentModel>?> getBookComments(
+      {required GetBookCommentsRequestDto request}) async {
+    final comments = await booksService.getBookComments(request: request);
+    return comments?.data.map((e) => e.toModel()).toList();
+  }
+
+  @override
+  Future<bool?> changeBookLikeStatus({
+    required ChangeLikeStatusRequestDto request,
+  }) async {
+    final result =
+        await booksService.changeCommentLikedStatus(request: request);
+    return result?.success;
+  }
+
+  @override
+  Future<int?> rateBook({required ChangeBookRateRequestDto request}) async {
+    final result = await booksService.changeBookRate(request: request);
+    return result?.value;
+  }
+
+  @override
+  Future<BooksModel?> getUserFavorite() async {
+    final result = await booksService.getUserFavorite();
+    return result?.toModel();
+  }
 }

@@ -2,9 +2,11 @@ part of data;
 
 @JsonSerializable()
 class GoogleAuthResultDto {
-  final String url;
+  final bool success;
+  final String token;
+  final UserDto user;
 
-  GoogleAuthResultDto(this.url);
+  GoogleAuthResultDto(this.success, this.token, this.user);
 
   factory GoogleAuthResultDto.fromJson(Map<String, dynamic> json) =>
       _$GoogleAuthResultDtoFromJson(json);

@@ -70,6 +70,7 @@ dependencies:
   webview_flutter: ^4.2.0
   google_sign_in: ^6.1.0
   firebase_core: ^2.11.0
+  image_picker: ^0.8.7+4
 
 
 dev_dependencies:

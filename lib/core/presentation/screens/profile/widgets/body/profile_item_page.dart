@@ -6,10 +6,13 @@ import '../../../../widgets/base/base_title.dart';
 
 class ProfileItemPage extends StatelessWidget {
   final String title;
+  final VoidCallback onTap;
+
 
   const ProfileItemPage({
     Key? key,
     required this.title,
+    required this.onTap,
   }) : super(key: key);
 
   @override

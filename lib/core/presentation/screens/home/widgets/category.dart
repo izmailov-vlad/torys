@@ -1,8 +1,4 @@
-import 'package:sizer/sizer.dart';
-
-import '../../../../../ui.dart';
 import '../../../presentation.dart';
-import '../../../widgets/base/base_title.dart';
 import 'books_cards.dart';
 import 'category_title.dart';
 
@@ -28,13 +24,23 @@ class BookCategory extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppContainer(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: AppMargin.mediumMargin.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CategoryTitle(title: title),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: AppPadding.largePadding.w,
+                ),
+                child: BaseText(
+                  title: title,
+                  style: Theme.of(context).textTheme.headlineLarge?.toBold(),
+                ),
+              ),
+
               if (!withBorder)
                 Padding(
                   padding: EdgeInsets.only(
@@ -44,7 +50,7 @@ class BookCategory extends StatelessWidget {
                     title: 'Показать все',
                     style: Theme.of(context)
                         .textTheme
-                        .headlineLarge
+                        .titleLarge
                         ?.toBold()
                         .withColor(AppColorsScheme.mainColor),
                     onTap: () => onShowAllTap(categoryId: id),
@@ -52,6 +58,7 @@ class BookCategory extends StatelessWidget {
                 ),
             ],
           ),
+          SizedBox(height: AppMargin.mediumMargin.h),
           BookCards(
             books: books,
             onTap: onBookTap,

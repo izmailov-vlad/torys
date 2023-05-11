@@ -9,7 +9,7 @@ class AppInterceptor extends InterceptorsWrapper {
   AppInterceptor(
     this._appSecureStorage,
     this._refreshTokenUseCase,
-    this._dio,
+    @Named('withTokenDio') this._dio,
   );
 
   @override
@@ -110,9 +110,6 @@ class AppInterceptor extends InterceptorsWrapper {
       RequestOptions options, RequestInterceptorHandler handler) async {
     AppLogger.logRequest(options);
     String? token = await _appSecureStorage.getAccessToken();
-
-    // token =
-    //   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjRmMWcyM2ExMmFhIn0.eyJpc3MiOiJiYWNrZW5kIiwiYXVkIjoibnV4dC1sayIsImp0aSI6IjRmMWcyM2ExMmFhIiwiaWF0IjoxNjc3ODQ3NTcxLCJuYmYiOjE2Nzc4NDc1NzEsImV4cCI6MTY4MDQzOTU3MSwidWlkIjoyOSwiYXV0aF9rZXkiOiJyXzctWVJJZnIwV1dKR05rc0EtV1hIT0dLQWR5SHZkSSJ9.66H14HC_SPeYInX-kzWgY-AWSOHQ2M-8cQqT8kJsvYE';
 
     if (token != null && token.isNotEmpty) {
       options.headers.putIfAbsent('Authorization', () => 'Bearer $token');
