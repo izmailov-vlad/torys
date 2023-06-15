@@ -4,16 +4,27 @@ part of 'bloc.dart';
 class HomeState with _$HomeState {
   const factory HomeState.init() = InitState;
 
-  const factory HomeState.fetched({
-    required CategoriesBooksUIModel booksByCategories,
-    required List<CategoryUIModel> categories,
-    required List<BookUiModel> books,
+  const factory HomeState.fetchedNewBooks({
     required List<BookUiModel> newBooks,
-  }) = FetchedState;
+  }) = FetchedNewBooksState;
 
-  const factory HomeState.navigateToBookDetail({required BookUiModel book}) = NavigateToBookDetailState;
+  const factory HomeState.fetchedPopularBooks({
+    required List<BookUiModel> popularBooks,
+  }) = FetchedPopularBooksState;
 
-  const factory HomeState.navigateToBooks({required BooksUiModel books}) = NavigateToBooksState;
+  const factory HomeState.fetchedCategories({
+    required List<CategoryUIModel> categories,
+  }) = FetchedCategoriesState;
+
+  const factory HomeState.fetchedBooksByCategories({
+    required CategoriesBooksUIModel booksByCategories,
+  }) = FetchedBooksByCategoriesState;
+
+  const factory HomeState.navigateToBookDetail({required BookUiModel book}) =
+      NavigateToBookDetailState;
+
+  const factory HomeState.navigateToBooks({required int categoryId}) =
+      NavigateToBooksState;
 
   const factory HomeState.loading() = LoadingState;
 

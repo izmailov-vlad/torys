@@ -1,3 +1,6 @@
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:shimmer/shimmer.dart';
+
 import '../../../../ui.dart';
 import '../../presentation.dart';
 
@@ -37,15 +40,15 @@ class BaseImage extends StatelessWidget {
         color: color,
         height: height,
         width: width,
-        fit: BoxFit.fill,
+        fit: BoxFit.contain,
       );
     } else {
       image = imagePath.isNotEmpty
-          ? Image.network(
-              imagePath,
-              fit: fit,
-              height: height,
-              width: width,
+          ? FancyShimmerImage(
+              imageUrl: imagePath,
+              boxFit: fit ?? BoxFit.contain,
+              height: height ?? 300,
+              width: width ?? 300,
             )
           : Image.asset(
               AppImages.bookPlaceholder,

@@ -30,15 +30,18 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
           curr is AuthorizationSuccessState ||
           curr is AuthorizationErrorState ||
           curr is RegistrationSuccessState ||
-          curr is AuthorizationGoogleAuthSuccessState,
+          curr is AuthorizationGoogleAuthSuccessState|| curr is AuthorizatioNavigateToWishesState,
       listener: (context, state) {
+        if(state is AuthorizatioNavigateToWishesState) {
+          context.router.replace(const WishesScreenRoute());
+        }
         if (state is AuthorizationGoogleAuthSuccessState) {
           context.router.push(BaseWebViewRoute(initialUrl: state.url));
         }
         if (state is AuthorizationErrorState) {
           BaseDialog.showSnackBar(
             context,
-            text: state.error.message?.toString() ?? '!!!',
+            text: 'User not found',
           );
         }
 

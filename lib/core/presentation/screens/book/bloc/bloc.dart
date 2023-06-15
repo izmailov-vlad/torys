@@ -40,16 +40,17 @@ class BookDetailBloc extends Bloc<BookDetailEvent, BookDetailState> {
     ));
     if (book == null) return;
     emit(BookDetailState.fetch(book: book));
+    emit(BookDetailState.changeComments(comment: book.comments));
   }
 
   Future<void> _changeRate(BookDetailChangeRateEvent event, _Emit emit) async {
     try {
       final newRate = await _changeBookRateUseCase(BookRateParams(
-        bookId: event.bookId,
+        bookId: event.book.id,
         rate: event.rate,
       ));
       if (newRate == null) return;
-      emit(BookDetailState.changeRate(rate: newRate));
+      emit(BookDetailState.fetch(book: event.book.copyWith(rate: newRate)));
     } catch (error, stackTrace) {
       ErrorHandler.catchError(
         error,
@@ -68,7 +69,9 @@ class BookDetailBloc extends Bloc<BookDetailEvent, BookDetailState> {
     final isFavorite =
         await _bookChangeFavoriteUseCase(BookChangeFavoriteParams(event.id));
     if (isFavorite == null) return;
-    emit(BookDetailState.changeFavorite(isFavorite: isFavorite));
+    emit(BookDetailState.fetch(
+      book: event.book.copyWith(isFavorite: isFavorite),
+    ));
   }
 
   Future<void> _addComment(BookDetailAddCommentEvent event, _Emit emit) async {

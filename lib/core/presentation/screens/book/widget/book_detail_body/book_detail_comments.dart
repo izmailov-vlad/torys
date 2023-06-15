@@ -13,6 +13,22 @@ class BookDetailComments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (comments.length == 1) {
+      return Padding(
+        padding: EdgeInsets.only(left: AppPadding.mediumPadding.w, right: AppPadding.mediumPadding.w),
+        child: SizedBox(
+          height: 33.h,
+          child: _CommentItem(
+            expand: true,
+            userName: comments.first.user.name,
+            comment: comments.first.text,
+            likesCount: comments.first.likesCount,
+            liked: comments.first.liked,
+            onLikeTap: () => onCommentLikeTap(commentId: comments.first.id),
+          ),
+        ),
+      );
+    }
     return SizedBox(
       height: 33.h,
       child: ListView.builder(
@@ -29,6 +45,7 @@ class BookDetailComments extends StatelessWidget {
             child: _CommentItem(
               userName: comments[index].user.name,
               comment: comments[index].text,
+              likesCount: comments[index].likesCount,
               liked: comments[index].liked,
               onLikeTap: () => onCommentLikeTap(commentId: comments[index].id),
             ),
@@ -44,6 +61,8 @@ class _CommentItem extends StatelessWidget {
   final String comment;
   final bool liked;
   final VoidCallback onLikeTap;
+  final int likesCount;
+  final bool expand;
 
   const _CommentItem({
     Key? key,
@@ -51,13 +70,15 @@ class _CommentItem extends StatelessWidget {
     required this.comment,
     required this.liked,
     required this.onLikeTap,
+    required this.likesCount,
+    this.expand = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppContainer(
       padding: const EdgeInsets.all(16),
-      width: 300,
+      width: expand ? double.infinity : 300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,7 +96,7 @@ class _CommentItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   BaseText(title: userName),
-                  const BaseText(title: '11 апреля 2022'),
+                  const BaseText(title: '14 июня 2023'),
                 ],
               ),
             ],
@@ -92,14 +113,8 @@ class _CommentItem extends StatelessWidget {
               _Icon(
                 icImage:
                     liked ? AppImages.icInFavorite : AppImages.icOutFavorite,
-                value: 32,
+                value: likesCount,
                 onTap: onLikeTap,
-              ),
-              SizedBox(width: AppPadding.mediumPadding.w),
-              _Icon(
-                icImage: AppImages.icComment,
-                value: 32,
-                onTap: () {},
               ),
             ],
           )

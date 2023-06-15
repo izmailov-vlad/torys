@@ -1,3 +1,4 @@
+import 'package:book_readers/core/presentation/screens/home/widgets/shimmers/books_shimmer.dart';
 import 'package:sizer/sizer.dart';
 import '../../router/auto_router.gr.dart';
 import '../../widgets/base/base_dialog.dart';
@@ -8,6 +9,11 @@ import 'widgets/categories.dart';
 import '../../widgets/base/base_loader.dart';
 import '../../../../ui.dart';
 import 'bloc/bloc.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
+
+import 'widgets/shimmers/big_book_card_shimmer.dart';
+import 'widgets/shimmers/books_with_border_shimmer.dart';
+import 'widgets/shimmers/categories_shimmer.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -15,12 +21,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeBloc, HomeState>(
+    return BlocListener<HomeBloc, HomeState>(
       listenWhen: (prev, curr) =>
           curr is NavigateToBookDetailState ||
           curr is ErrorState ||
           curr is NavigateToBooksState,
-      buildWhen: (prev, curr) => curr is FetchedState || curr is LoadingState,
       listener: (context, state) {
         if (state is ErrorState) {
           BaseDialog.showSnackBar(
@@ -29,66 +34,58 @@ class HomeScreen extends StatelessWidget {
           );
         }
         if (state is NavigateToBooksState) {
-          context.router.push(BooksPageRoute(books: state.books));
+          context.router.push(BooksPageRoute(categoryId: state.categoryId));
         }
         if (state is NavigateToBookDetailState) {
           context.router.push(BookDetailPageRoute(bookId: state.book.id));
         }
       },
-      builder: (context, state) => state.maybeWhen(
-        fetched: (booksByCategories, categories, books, newBooks) => Padding(
-          padding: EdgeInsets.only(
-            top: AppPadding.mediumPadding.h,
-            bottom: AppPadding.mediumPadding.h,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BookCards(
-                      books: newBooks,
-                      onTap: ({required String bookId}) {
-                        context.read<HomeBloc>().add(ChooseBookEvent(bookId));
-                      },
-                      withBorder: true,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: AppPadding.mediumPadding.h,
-                    left: AppPadding.largePadding.w,
-                    right: AppPadding.largePadding.w,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BaseText(
-                        title: 'Жанры',
-                        style:
-                            Theme.of(context).textTheme.headlineLarge?.toBold(),
+                BlocBuilder<HomeBloc, HomeState>(
+                  buildWhen: (prev, curr) =>
+                      curr is LoadingState || curr is FetchedNewBooksState,
+                  builder: (context, state) => state.maybeWhen(
+                    orElse: () => const BaseLoader(),
+                    loading: () => AppContainer(
+                        padding: EdgeInsets.only(
+                          bottom: AppPadding.mediumPadding.h,
+                          top: AppPadding.mediumPadding.h,
+                        ),
+                        child: const BookWithBorderShimmer()),
+                    fetchedNewBooks: (books) => AppContainer(
+                      padding: EdgeInsets.only(
+                        bottom: AppPadding.mediumPadding.h,
+                        top: AppPadding.mediumPadding.h,
                       ),
-                      BaseText(
-                        title: 'Показать все',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
-                            ?.toBold()
-                            .withColor(AppColorsScheme.mainColor),
-                        onTap: () {
-                          context.router
-                              .parent<TabsRouter>()
-                              ?.setActiveIndex(1);
+                      child: BookCards(
+                        books: books,
+                        onTap: ({required String bookId}) {
+                          context.read<HomeBloc>().add(ChooseBookEvent(bookId));
                         },
-                      )
-                    ],
+                        withBorder: true,
+                        category: BookCategory(
+                          title: 'Новинки',
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(height: AppMargin.smallMargin.h),
-                Categories(
+                )
+              ],
+            ),
+            SizedBox(height: AppPadding.mediumPadding.h),
+            BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (prev, curr) =>
+                  curr is LoadingState || curr is FetchedCategoriesState,
+              builder: (context, state) => state.maybeWhen(
+                orElse: () => const BaseLoader(),
+                loading: () => const CategoryShimmer(),
+                fetchedCategories: (categories) => Categories(
                   categories: categories,
                   onCategoryTap: ({required int categoryId}) =>
                       context.read<HomeBloc>().add(
@@ -101,36 +98,94 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                 ),
-                SizedBox(height: AppMargin.mediumMargin.h),
-                ListView.builder(
+              ),
+            ),
+            SizedBox(height: AppPadding.mediumPadding.h),
+            BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (prev, curr) =>
+                  curr is LoadingState || curr is FetchedPopularBooksState,
+              builder: (context, state) => state.maybeWhen(
+                orElse: () => const BaseLoader(),
+                loading: () => AppContainer(
+                  padding: EdgeInsets.only(
+                    bottom: AppPadding.mediumPadding.h,
+                    top: AppPadding.mediumPadding.h,
+                  ),
+                  child: const BigBookCardShimmer(),
+                ),
+                fetchedPopularBooks: (books) => AppContainer(
+                  padding: EdgeInsets.only(
+                    bottom: AppPadding.mediumPadding.h,
+                    top: AppPadding.mediumPadding.h,
+                  ),
+                  child: BookCards(
+                    bigCard: true,
+                    books: books,
+                    onTap: ({required String bookId}) {
+                      context.read<HomeBloc>().add(ChooseBookEvent(bookId));
+                    },
+                    category: BookCategory(
+                      title: 'Популярное',
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: AppPadding.mediumPadding.h),
+            BlocBuilder<HomeBloc, HomeState>(
+              buildWhen: (prev, curr) =>
+                  curr is LoadingState || curr is FetchedBooksByCategoriesState,
+              builder: (context, state) => state.maybeWhen(
+                orElse: () => const BaseLoader(),
+                loading: () => ListView.builder(
+                  physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return BooksShimmer();
+                  },
+                ),
+                fetchedBooksByCategories: (booksByCategories) =>
+                    ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: booksByCategories.categoriesBooks.length,
                   itemBuilder: (context, index) {
-                    return BookCategory(
-                      id: booksByCategories
-                          .categoriesBooks[index].bookCategory.id,
-                      title: booksByCategories
-                          .categoriesBooks[index].bookCategory.title,
-                      books: booksByCategories.categoriesBooks[index].books,
-                      onBookTap: ({required String bookId}) {
-                        context.read<HomeBloc>().add(ChooseBookEvent(bookId));
-                      },
-                      onShowAllTap: ({required int categoryId}) =>
-                          context.read<HomeBloc>().add(
-                                HomeEvent.onShowAllTap(
-                                  booksByCategories
-                                      .categoriesBooks[index].bookCategory.id,
-                                ),
-                              ),
+                    return AppContainer(
+                      padding: index == 0
+                          ? EdgeInsets.only(
+                              bottom: AppPadding.mediumPadding.h,
+                              top: AppPadding.mediumPadding.h,
+                            )
+                          : EdgeInsets.only(
+                              bottom: AppPadding.mediumPadding.h,
+                            ),
+                      child: BookCards(
+                        category: BookCategory(
+                          id: booksByCategories
+                              .categoriesBooks[index].bookCategory.id,
+                          title: booksByCategories
+                              .categoriesBooks[index].bookCategory.title,
+                          onShowAllTap: ({required int categoryId}) =>
+                              context.read<HomeBloc>().add(
+                                    HomeEvent.onShowAllTap(
+                                      booksByCategories.categoriesBooks[index]
+                                          .bookCategory.id,
+                                    ),
+                                  ),
+                        ),
+                        books: booksByCategories.categoriesBooks[index].books,
+                        onTap: ({required String bookId}) {
+                          context.read<HomeBloc>().add(ChooseBookEvent(bookId));
+                        },
+                      ),
                     );
                   },
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-        orElse: () => const BaseLoader(),
       ),
     );
   }

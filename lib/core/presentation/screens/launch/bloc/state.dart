@@ -8,5 +8,6 @@ class LaunchState with _$LaunchState {
 
 enum NavigateToRoute {
   auth,
-  main
+  main,
+  wishes,
 }

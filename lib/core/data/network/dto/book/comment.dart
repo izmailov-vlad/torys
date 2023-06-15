@@ -8,6 +8,8 @@ class CommentDto {
   @JsonKey(name: 'created_at')
   final String createdAt;
   final UserDto user;
+  @JsonKey(name: 'likes_count')
+  final int? likesCount;
 
   const CommentDto(
     this.id,
@@ -15,6 +17,7 @@ class CommentDto {
     this.user,
     this.liked,
     this.createdAt,
+    this.likesCount,
   );
 
   factory CommentDto.fromJson(Map<String, dynamic> json) =>

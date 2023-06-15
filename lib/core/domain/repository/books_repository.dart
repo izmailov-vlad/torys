@@ -3,13 +3,13 @@ part of domain;
 abstract class BooksRepository {
   Future<List<CategoryModel>?> getCategories();
 
-  Future<List<BookModel>?> getPopularBooks({required int userId});
+  Future<List<BookModel>?> getPopularBooks();
 
   Future<CategoriesBooksModel?> getBooksByCategories();
 
   Future<BookModel?> getBookById(String id);
 
-  Future<BooksModel?> getBooksByCategoryId(int id);
+  Future<BooksModel?> getBooksByCategoryId({required int id, required PaginationRequestDto pagination});
 
   Future<BooksModel?> getBooksByQuery({required SearchRequestDto request});
 
@@ -35,4 +35,6 @@ abstract class BooksRepository {
   });
 
   Future<BooksModel?> getUserFavorite();
+
+  Future<bool?> saveUserWishes({required WishesRequestDto request});
 }

@@ -14,6 +14,7 @@ extension UserExtension on UserModel {
       id: Value<int>(id),
       name: Value<String>(name),
       email: Value<String>(email),
+      photo: Value<String?>(photo)
     );
   }
 }
@@ -24,6 +25,7 @@ extension UserEntityExtension on User {
       id: id,
       name: name,
       email: email,
+      photo: photo,
     );
   }
 }

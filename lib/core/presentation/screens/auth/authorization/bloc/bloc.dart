@@ -11,11 +11,12 @@ part 'bloc.freezed.dart';
 
 typedef _Emit = Emitter<AuthorizationState>;
 
-@injectable
+@Injectable()
 class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
   final LogInUseCase _logInUseCase;
   final RegisterUseCase _registerUseCase;
   final GoogleLoginUseCase _googleLoginUseCase;
+  final CheckUserSelectedWishes _checkUserSelectedWishes;
   late final GoogleSignIn _googleSignIn;
   final List<String> scopes = <String>[
     'email',
@@ -26,6 +27,7 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
     this._logInUseCase,
     this._registerUseCase,
     this._googleLoginUseCase,
+    this._checkUserSelectedWishes,
   ) : super(const AuthorizationInitState()) {
     on<AuthorizationInitEvent>(_onInit);
     on<AuthorizationAuthEvent>(_onAuth);
@@ -52,9 +54,9 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
           password: event.password,
         ),
       );
-      if (registerResult != null) {
-        emit(const RegistrationSuccessState());
-      }
+      if (registerResult == null) return;
+
+      emit(const AuthorizationState.navigateToWishes());
     } catch (error, stackTrace) {
       ErrorHandler.catchError(
         error,
@@ -79,7 +81,12 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
         ),
       );
       if (result == null) return;
-      emit(const AuthorizationState.authSuccess());
+      final isWishesPassed = await _checkUserSelectedWishes(const NoParams());
+      if (isWishesPassed) {
+        emit(const AuthorizationState.authSuccess());
+        return;
+      }
+      emit(const AuthorizationState.navigateToWishes());
     } catch (error, stackTrace) {
       ErrorHandler.catchError(
         error,
@@ -100,7 +107,12 @@ class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
         ),
       );
       if (authResult != null && authResult.success) {
-        emit(const AuthorizationSuccessState());
+        final isWishesPassed = await _checkUserSelectedWishes(const NoParams());
+        if (isWishesPassed) {
+          emit(const AuthorizationSuccessState());
+          return;
+        }
+        emit(const AuthorizationState.navigateToWishes());
       }
     } catch (error, stackTrace) {
       ErrorHandler.catchError(

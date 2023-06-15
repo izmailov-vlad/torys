@@ -4,6 +4,8 @@ part of 'bloc.dart';
 class AuthorizationState with _$AuthorizationState {
   const factory AuthorizationState.init() = AuthorizationInitState;
 
+  const factory AuthorizationState.navigateToWishes() = AuthorizatioNavigateToWishesState;
+
   const factory AuthorizationState.authSuccess() = AuthorizationSuccessState;
 
   const factory AuthorizationState.googleAuthSuccess({required String url}) = AuthorizationGoogleAuthSuccessState;

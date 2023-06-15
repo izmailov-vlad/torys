@@ -1,20 +1,29 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import '../../../../presentation.dart';
 import '../../../../router/auto_router.gr.dart';
-import '../../../../widgets/base/base_container.dart';
 import '../../../../widgets/book/book_rating.dart';
 import '../../bloc/bloc.dart';
 import 'book_detail_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class BookDetailBodyContainer extends StatelessWidget {
+class BookDetailBodyContainer extends StatefulWidget {
   final String bookId;
   final String author;
   final String title;
   final bool isFavorite;
+  final int rate;
   final String bookWebViewUrl;
   final int pageCount;
   final double averageRating;
   final int commentsCount;
   final int likesCount;
+  final VoidCallback onFavoriteTap;
+  final Function(int rate) onRateTap;
 
   const BookDetailBodyContainer({
     Key? key,
@@ -27,22 +36,103 @@ class BookDetailBodyContainer extends StatelessWidget {
     required this.averageRating,
     required this.commentsCount,
     required this.likesCount,
+    required this.onFavoriteTap,
+    required this.onRateTap,
+    required this.rate,
   }) : super(key: key);
 
   @override
+  State<BookDetailBodyContainer> createState() =>
+      _BookDetailBodyContainerState();
+}
+
+class _BookDetailBodyContainerState extends State<BookDetailBodyContainer> {
+  bool loading = false;
+  Dio dio = Dio();
+  String filePath = "";
+
+  // @override
+  // void initState() {
+  //   download();
+  //   super.initState();
+  // }
+  //
+  // download() async {
+  //   if (Platform.isAndroid || Platform.isIOS) {
+  //     String? firstPart;
+  //     final deviceInfoPlugin = DeviceInfoPlugin();
+  //     final deviceInfo = await deviceInfoPlugin.deviceInfo;
+  //     final allInfo = deviceInfo.data;
+  //     if (allInfo['version']["release"].toString().contains(".")) {
+  //       int indexOfFirstDot = allInfo['version']["release"].indexOf(".");
+  //       firstPart = allInfo['version']["release"].substring(0, indexOfFirstDot);
+  //     } else {
+  //       firstPart = allInfo['version']["release"];
+  //     }
+  //     int intValue = int.parse(firstPart!);
+  //     if (intValue >= 13) {
+  //       await startDownload();
+  //     } else {
+  //       if (await Permission.storage.isGranted) {
+  //         await Permission.storage.request();
+  //         await startDownload();
+  //       } else {
+  //         await startDownload();
+  //       }
+  //     }
+  //   } else {
+  //     loading = false;
+  //   }
+  // }
+
+  // startDownload() async {
+  //   Directory? appDocDir = Platform.isAndroid
+  //       ? await getExternalStorageDirectory()
+  //       : await getApplicationDocumentsDirectory();
+  //
+  //   String path = appDocDir!.path + '/sample.epub';
+  //   File file = File(path);
+  //
+  //   if (!File(path).existsSync()) {
+  //     await file.create();
+  //     await dio.download(
+  //       "https://vocsyinfotech.in/envato/cc/flutter_ebook/uploads/22566_The-Racketeer---John-Grisham.epub",
+  //       path,
+  //       deleteOnError: true,
+  //       onReceiveProgress: (receivedBytes, totalBytes) {
+  //         setState(() {
+  //           loading = true;
+  //         });
+  //       },
+  //     ).whenComplete(() {
+  //       setState(() {
+  //         loading = false;
+  //         filePath = path;
+  //       });
+  //     });
+  //   } else {
+  //     setState(() {
+  //       loading = false;
+  //       filePath = path;
+  //     });
+  //   }
+  // }
+
+  @override
   Widget build(BuildContext context) {
-    return BaseContainer(
+    return AppContainer(
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Text(
-            author,
+            widget.author,
             style: Theme.of(context).textTheme.headlineLarge?.withColor(
                   AppColorsScheme.grey1,
                 ),
           ),
           const SizedBox(height: 4),
           Text(
-            title,
+            widget.title,
             style: Theme.of(context).textTheme.displayLarge?.toBold(),
           ),
           const SizedBox(height: 16),
@@ -50,22 +140,22 @@ class BookDetailBodyContainer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               BookDetailInfo(
-                value: pageCount.toString(),
+                value: widget.pageCount.toString(),
                 title: 'Кол-во стр',
                 iconPath: AppImages.icBook,
               ),
               BookDetailInfo(
-                value: averageRating.toString(),
+                value: widget.averageRating.toString(),
                 title: 'Рейтинг',
                 iconPath: AppImages.icInFavorite,
               ),
               BookDetailInfo(
-                value: commentsCount.toString(),
+                value: widget.commentsCount.toString(),
                 title: 'Отзывы',
                 iconPath: AppImages.icComment,
               ),
               BookDetailInfo(
-                value: likesCount.toString(),
+                value: widget.likesCount.toString(),
                 title: 'Добавили',
                 iconPath: AppImages.icPerson,
               ),
@@ -79,9 +169,40 @@ class BookDetailBodyContainer extends StatelessWidget {
                   onPressed: () {
                     context.router.push(
                       BaseWebViewRoute(
-                        initialUrl: bookWebViewUrl,
+                        initialUrl: widget.bookWebViewUrl,
                       ),
                     );
+                    // if (filePath == "") {
+                    //   download();
+                    // } else {
+                    //   VocsyEpub.setConfig(
+                    //     themeColor: Theme.of(context).primaryColor,
+                    //     identifier: "iosBook",
+                    //     scrollDirection: EpubScrollDirection.ALLDIRECTIONS,
+                    //     allowSharing: true,
+                    //     enableTts: true,
+                    //     nightMode: true,
+                    //   );
+                    //
+                    //   // get current locator
+                    //   VocsyEpub.locatorStream.listen((locator) {
+                    //     print('LOCATOR: $locator');
+                    //   });
+                    //
+                    //   VocsyEpub.open(
+                    //     filePath,
+                    //     lastLocation: EpubLocator.fromJson({
+                    //       "bookId": "2239",
+                    //       "href": "/OEBPS/ch06.xhtml",
+                    //       "created": 1539934158390,
+                    //       "locations": {
+                    //         "cfi": "epubcfi(/0!/4/4[simple_book]/2/2/6)"
+                    //       }
+                    //     }),
+                    //   );
+                    // }
+
+// Get locator which you can save in your database
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -96,26 +217,21 @@ class BookDetailBodyContainer extends StatelessWidget {
                 padding: EdgeInsets.all(AppPadding.mediumPadding.w),
                 withBorder: true,
                 borderColor: context.theme.primaryColor,
-                onTap: () => context.read<BookDetailBloc>().add(
-                      BookChangeFavoriteEvent(
-                        id: bookId,
-                      ),
-                    ),
+                onTap: widget.onFavoriteTap,
                 child: BlocBuilder<BookDetailBloc, BookDetailState>(
-                  buildWhen: (prev, curr) =>
-                      curr is BookDetailChangeFavoriteState,
+                  buildWhen: (prev, curr) => curr is BookDetailFetchState,
                   builder: (context, state) => state.maybeWhen(
-                    changeFavorite: (isFavorite) => AnimatedSwitcher(
+                    fetch: (book) => AnimatedSwitcher(
                       duration: const Duration(milliseconds: 150),
                       transitionBuilder:
                           (Widget child, Animation<double> animation) {
                         return ScaleTransition(child: child, scale: animation);
                       },
                       child: BaseImage(
-                        key: ValueKey<bool>(isFavorite),
+                        key: ValueKey<bool>(book.isFavorite),
                         // Unique key for each child
                         imageType: ImageType.asset,
-                        imagePath: isFavorite
+                        imagePath: book.isFavorite
                             ? AppImages.icInFavorite
                             : AppImages.icOutFavorite,
                       ),
@@ -127,10 +243,10 @@ class BookDetailBodyContainer extends StatelessWidget {
                         return ScaleTransition(child: child, scale: animation);
                       },
                       child: BaseImage(
-                        key: ValueKey<bool>(isFavorite),
+                        key: ValueKey<bool>(widget.isFavorite),
                         // Unique key for each child
                         imageType: ImageType.asset,
-                        imagePath: isFavorite
+                        imagePath: widget.isFavorite
                             ? AppImages.icInFavorite
                             : AppImages.icOutFavorite,
                       ),
@@ -141,49 +257,34 @@ class BookDetailBodyContainer extends StatelessWidget {
             ],
           ),
           SizedBox(height: AppMargin.mediumMargin.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              BaseText(
-                  title: 'Поставить\nоценку',
-                  style: context.theme.textTheme.headlineLarge?.toBold()),
-              BlocBuilder<BookDetailBloc, BookDetailState>(
-                buildWhen: (prev, curr) =>
-                    curr is BookDetailFetchState || curr is BookDetailRateState,
-                builder: (context, state) => state.maybeWhen(
-                  fetch: (book) => BookRating(
-                    onValueChanged: (int newRate) =>
-                        context.read<BookDetailBloc>().add(
-                              BookDetailEvent.changeBookRate(
-                                rate: newRate,
-                                bookId: bookId,
-                              ),
-                            ),
+          BlocBuilder<BookDetailBloc, BookDetailState>(
+            buildWhen: (prev, curr) => curr is BookDetailFetchState,
+            builder: (context, state) => state.maybeWhen(
+              fetch: (book) => Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  BaseText(
+                      title: 'Поставить\nоценку',
+                      style: context.theme.textTheme.headlineLarge?.toBold()),
+                  BookRating(
+                    onValueChanged: widget.onRateTap,
                     value: book.rate,
                   ),
-                  changeRate: (rate) => BookRating(
-                    onValueChanged: (int newRate) =>
-                        context.read<BookDetailBloc>().add(
-                              BookDetailEvent.changeBookRate(
-                                rate: newRate,
-                                bookId: bookId,
-                              ),
-                            ),
-                    value: rate,
-                  ),
-                  orElse: () => BookRating(
-                    onValueChanged: (int newRate) =>
-                        context.read<BookDetailBloc>().add(
-                              BookDetailEvent.changeBookRate(
-                                rate: newRate,
-                                bookId: bookId,
-                              ),
-                            ),
-                    value: 0,
-                  ),
-                ),
+                ],
               ),
-            ],
+              orElse: () => Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  BaseText(
+                      title: 'Поставить\nоценку',
+                      style: context.theme.textTheme.headlineLarge?.toBold()),
+                  BookRating(
+                    onValueChanged: widget.onRateTap,
+                    value: widget.rate,
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

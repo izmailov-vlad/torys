@@ -15,6 +15,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  camera:
     
     
   flutter_localizations: 
@@ -71,6 +72,15 @@ dependencies:
   google_sign_in: ^6.1.0
   firebase_core: ^2.11.0
   image_picker: ^0.8.7+4
+  bloc_concurrency: ^0.2.1
+  shimmer_animation: ^2.1.0+1
+  fancy_shimmer_image: ^2.0.2
+  shared_preferences: ^2.1.1
+
+  #reader
+  vocsy_epub_viewer: ^2.0.0
+  device_info_plus: ^8.1.0
+  permission_handler: ^10.2.0
 
 
 dev_dependencies:

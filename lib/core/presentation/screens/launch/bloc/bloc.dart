@@ -11,8 +11,10 @@ typedef _Emit = Emitter<LaunchState>;
 @Injectable()
 class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   final CheckAuthUseCase _checkAuthUseCase;
+  final CheckUserSelectedWishes _checkUserSelectedWishes;
 
-  LaunchBloc(this._checkAuthUseCase) : super(const LaunchState.init()) {
+  LaunchBloc(this._checkAuthUseCase, this._checkUserSelectedWishes)
+      : super(const LaunchState.init()) {
     on<_CheckAuthEvent>(_checkAuth);
   }
 
@@ -20,7 +22,12 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
     try {
       final isAuth = await _checkAuthUseCase(const NoParams());
       if (isAuth) {
-        emit(const LaunchState.navigateTo(NavigateToRoute.main));
+        final isWishesPassed = await _checkUserSelectedWishes(const NoParams());
+        if (isWishesPassed) {
+          emit(const LaunchState.navigateTo(NavigateToRoute.main));
+        } else {
+          emit(const LaunchState.navigateTo(NavigateToRoute.wishes));
+        }
         return;
       }
       emit(const LaunchState.navigateTo(NavigateToRoute.auth));

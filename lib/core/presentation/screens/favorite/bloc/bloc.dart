@@ -25,8 +25,12 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   }
 
   Future<void> _init(FavoriteInitEvent event, _Emit emit) async {
+    emit(const FavoriteState.loading());
     final books = await _getUserFavoriteBookUseCase(const NoParams());
-    if (books == null) return;
+    if (books == null || books.items.isEmpty) {
+      emit(const FavoriteState.empty());
+      return;
+    }
     emit(FavoriteState.fetched(books: books));
   }
 
@@ -35,9 +39,12 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   }
 
   Future<void> _onFavoriteTap(FavoriteOnTapEvent event, _Emit emit) async {
-    final result =
+    final isFavorite =
         await _bookChangeFavoriteUseCase(BookChangeFavoriteParams(event.id));
-    if (result == null) return;
-    emit(FavoriteState.changeFavorite(isFavorite: result));
+    if (isFavorite == null) return;
+
+    event.books.items.removeWhere((element) => element.id == event.id);
+
+    emit(FavoriteState.fetched(books: event.books));
   }
 }

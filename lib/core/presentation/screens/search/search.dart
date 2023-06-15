@@ -3,19 +3,35 @@ import '../../../../utils/app_logger.dart';
 import '../../presentation.dart';
 import '../../router/auto_router.gr.dart';
 import '../../widgets/base/base_icon.dart';
-import '../../widgets/base/base_input_text_field.dart';
-import '../books/widgets/book_list_item.dart';
+import '../../widgets/book/view_book_card.dart';
 import 'bloc/bloc.dart';
 import 'book_search_bloc/bloc.dart';
 import 'widgets/categories_list.dart';
+import 'widgets/search_items_shimmer.dart';
 
 @RoutePage()
-class SearchScreen extends StatelessWidget implements AutoRouteWrapper {
+class SearchScreen extends StatefulWidget implements AutoRouteWrapper {
   const SearchScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
     return AppProvider(child: this);
+  }
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  Timer? _debounce;
+  final controller = TextEditingController();
+  final scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -29,14 +45,12 @@ class SearchScreen extends StatelessWidget implements AutoRouteWrapper {
             curr is SearchInitState ||
             curr is SearchFetchedState ||
             curr is SearchErrorState,
-        listener: (context, state) {
-          state.maybeWhen(
-            navigateToBooksByCategory: (books) => context.router.push(
-              BooksPageRoute(books: books),
-            ),
-            orElse: () => AppLogger.log(message: 'undefined state'),
-          );
-        },
+        listener: (context, state) => state.maybeWhen(
+          navigateToBooksByCategory: (categoryId) => context.router.push(
+            BooksPageRoute(categoryId: categoryId),
+          ),
+          orElse: () => AppLogger.log(message: 'undefined state'),
+        ),
         builder: (context, state) {
           return state.maybeWhen(
             init: () => const BaseLoader(),
@@ -47,15 +61,42 @@ class SearchScreen extends StatelessWidget implements AutoRouteWrapper {
                   builder: (context, state) => state.maybeWhen(
                     listState: (show) => _SearchBooksField(
                       show: show,
-                      onEraseTap: () => context.read<BookSearchBloc>().add(
-                            const BookSearchFindByQuery(
-                              query: '',
-                            ),
-                          ),
+                      onEraseTap: () {
+                        controller.text = '';
+                        context.read<BookSearchBloc>().add(
+                              const BookSearchFindByQuery(
+                                query: '',
+                              ),
+                            );
+                      },
+                      controller: controller,
+                      onChanged: (String text) {
+                        if (_debounce?.isActive ?? false) _debounce?.cancel();
+                        _debounce = Timer(
+                          const Duration(milliseconds: 500),
+                          () {
+                            context.read<BookSearchBloc>().add(
+                                  BookSearchEvent.findByQuery(query: text),
+                                );
+                          },
+                        );
+                      },
                     ),
                     orElse: () => _SearchBooksField(
                       show: false,
                       onEraseTap: () {},
+                      controller: controller,
+                      onChanged: (String text) {
+                        if (_debounce?.isActive ?? false) _debounce?.cancel();
+                        _debounce = Timer(
+                          const Duration(milliseconds: 500),
+                          () {
+                            context.read<BookSearchBloc>().add(
+                                  BookSearchEvent.findByQuery(query: text),
+                                );
+                          },
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -65,10 +106,22 @@ class SearchScreen extends StatelessWidget implements AutoRouteWrapper {
                       _Body(categories: categories),
                       BlocBuilder<BookSearchBloc, BookSearchState>(
                         buildWhen: (prev, curr) =>
-                            curr is BookSearchBooksFetchedState,
+                            curr is BookSearchBooksFetchedState ||
+                            curr is BookLoadingState,
                         builder: (context, state) => state.maybeWhen(
+                          booksLoading: () => const SearchBooksShimmer(),
                           booksFetched: (books) => _SearchListView(
                             books: books,
+                            textEditingController: controller,
+                            refresh: () {
+                              context.read<BookSearchBloc>().add(
+                                    BookSearchEvent.findByQuery(
+                                      books: books,
+                                      query: controller.text,
+                                    ),
+                                  );
+                            },
+                            scrollController: scrollController,
                           ),
                           orElse: () => const SizedBox(),
                         ),
@@ -86,26 +139,19 @@ class SearchScreen extends StatelessWidget implements AutoRouteWrapper {
   }
 }
 
-class _SearchBooksField extends StatefulWidget {
+class _SearchBooksField extends StatelessWidget {
   final bool show;
   final VoidCallback? onEraseTap;
+  final Function(String text) onChanged;
+  final TextEditingController controller;
 
-  const _SearchBooksField({Key? key, required this.show, this.onEraseTap})
-      : super(key: key);
-
-  @override
-  State<_SearchBooksField> createState() => _SearchBooksFieldState();
-}
-
-class _SearchBooksFieldState extends State<_SearchBooksField> {
-  Timer? _debounce;
-  final TextEditingController _controller = TextEditingController();
-
-  @override
-  void dispose() {
-    _debounce?.cancel();
-    super.dispose();
-  }
+  const _SearchBooksField({
+    Key? key,
+    required this.show,
+    this.onEraseTap,
+    required this.controller,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -118,29 +164,18 @@ class _SearchBooksFieldState extends State<_SearchBooksField> {
         Radius.circular(0),
       ),
       child: BaseInputTextField(
-        controller: _controller,
+        controller: controller,
         hintText: 'Введите название книги или автора',
-        suffixIcon: widget.show
+        suffixIcon: show
             ? BaseIcon(
                 icon: const Icon(Icons.close),
                 onTap: () {
                   context.unfocus();
-                  _controller.clear();
-                  if (widget.onEraseTap != null) widget.onEraseTap!();
+                  if (onEraseTap != null) onEraseTap!();
                 },
               )
             : null,
-        onChanged: (text) {
-          if (_debounce?.isActive ?? false) _debounce?.cancel();
-          _debounce = Timer(
-            const Duration(milliseconds: 500),
-            () {
-              context.read<BookSearchBloc>().add(
-                    BookSearchEvent.findByQuery(query: text),
-                  );
-            },
-          );
-        },
+        onChanged: (text) => onChanged(text),
         withBorder: false,
         filled: true,
         fillColor: AppColorsScheme.grey4,
@@ -152,18 +187,50 @@ class _SearchBooksFieldState extends State<_SearchBooksField> {
   }
 }
 
-class _SearchListView extends StatelessWidget {
+class _SearchListView extends StatefulWidget {
   final BooksUiModel books;
+  final TextEditingController textEditingController;
+  final VoidCallback refresh;
+  final ScrollController scrollController;
 
   const _SearchListView({
     Key? key,
     required this.books,
+    required this.textEditingController,
+    required this.refresh,
+    required this.scrollController,
   }) : super(key: key);
+
+  @override
+  State<_SearchListView> createState() => _SearchListViewState();
+}
+
+class _SearchListViewState extends State<_SearchListView> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.scrollController.hasClients) return;
+    widget.scrollController.addListener(
+      () {
+        if (widget.scrollController.position.pixels >=
+            widget.scrollController.position.maxScrollExtent) {
+          widget.refresh();
+        }
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return AppContainer(
-      child: BlocBuilder<BookSearchBloc, BookSearchState>(
+      child: BlocConsumer<BookSearchBloc, BookSearchState>(
+        buildWhen: (prev, curr) => curr is BookSearchListState,
+        listenWhen: (prev, curr) => curr is BookSearchBooksFetchedState,
+        listener: (context, state) => state.maybeWhen(
+          orElse: () {
+            return null;
+          },
+        ),
         builder: (context, state) => state.maybeWhen(
           listState: (show) => AnimatedContainer(
             color: AppColorsScheme.grey4,
@@ -171,32 +238,47 @@ class _SearchListView extends StatelessWidget {
             curve: Curves.easeIn,
             height: show ? context.screenSize.height : 0,
             child: ListView.builder(
-              itemCount: books.items.length,
+              controller: widget.scrollController,
+              itemCount: widget.books.items.length,
               itemBuilder: (context, index) {
-                return Padding(
+                Widget item = Padding(
                   padding: EdgeInsets.only(
-                    top: index == 0 ? AppPadding.mediumPadding.h : 0,
-                    bottom: AppPadding.mediumPadding.h,
-                    right: AppPadding.bigPadding.w,
-                    left: AppPadding.bigPadding.w,
+                    top: index == 0 ? AppMargin.smallMargin.h : 0,
+                    bottom: AppMargin.smallMargin.h,
+                    right: AppMargin.largeMargin.w,
+                    left: AppMargin.largeMargin.w,
                   ),
-                  child: BookListItem(
-                    title: books.items[index].title,
-                    author: books.items[index].authors.isNotEmpty
-                        ? books.items[index].authors.first
-                        : '',
-                    publishYear: 2022,
-                    description: books.items[index].description,
-                    imageUrl: books.items[index].volumeInfo.imageLinks?.image,
-                    isFavorite: false,
-                    onFavoriteTap: () {},
+                  child: AppContainer(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     onTap: () {
                       context.router.push(
-                        BookDetailPageRoute(bookId: books.items[index].id),
+                        BookDetailPageRoute(
+                            bookId: widget.books.items[index].id),
                       );
                     },
+                    child: ViewBookCard(
+                      book: widget.books.items[index],
+                      onFavoriteTap: () => context.read<BookSearchBloc>().add(
+                            BookSearchEvent.onFavoriteTap(
+                              bookId: widget.books.items[index].id,
+                              books: widget.books,
+                            ),
+                          ),
+                    ),
                   ),
                 );
+                if (index == widget.books.items.length - 1) {
+                  item = Column(
+                    children: [
+                      item,
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: BaseLoader(),
+                      ),
+                    ],
+                  );
+                }
+                return item;
               },
             ),
           ),
@@ -235,9 +317,9 @@ class _Body extends StatelessWidget {
             CategoriesListView(
               categories: categories,
               onCategoryTap: ({required int id}) {
-                context.read<SearchBloc>().add(
-                      OnCategoryTap(id: id),
-                    );
+                context.router.push(
+                  BooksPageRoute(categoryId: id),
+                );
               },
             ),
           ],

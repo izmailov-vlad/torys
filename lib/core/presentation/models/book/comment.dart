@@ -5,11 +5,13 @@ class CommentUiModel {
   final String text;
   final bool liked;
   final UserUiModel user;
+  final int likesCount;
 
-  CommentUiModel({
+  const CommentUiModel({
     required this.id,
     required this.text,
     required this.user,
+    required this.likesCount,
     required this.liked,
   });
 }

@@ -1,18 +1,14 @@
 part of domain;
 
-abstract class GetPopularBooksUseCase {
-  Future<List<BookUiModel>?> call();
-}
-
-@Injectable(as: GetPopularBooksUseCase)
-class GetPopularBooksUseCaseImpl implements GetPopularBooksUseCase {
+@Injectable()
+class GetPopularBooksUseCase implements UseCase<List<BookUiModel>?, NoParams> {
   final BooksRepository booksRepository;
 
-  GetPopularBooksUseCaseImpl(this.booksRepository);
+  GetPopularBooksUseCase(this.booksRepository);
 
   @override
-  Future<List<BookUiModel>?> call() async {
-    final popularBooksModel = await booksRepository.getPopularBooks(userId: 1);
+  Future<List<BookUiModel>?> call(params) async {
+    final popularBooksModel = await booksRepository.getPopularBooks();
     final popularBooks = popularBooksModel?.map((book) => book.toUiModel()).toList();
     return popularBooks;
   }

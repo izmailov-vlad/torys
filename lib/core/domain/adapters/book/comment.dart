@@ -7,6 +7,7 @@ extension CommentModelExtension on CommentModel {
       text: text,
       user: user.toUserUiModel(),
       liked: liked,
+      likesCount: likesCount,
     );
   }
 }

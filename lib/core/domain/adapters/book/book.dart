@@ -11,7 +11,7 @@ extension BookExtension on BookModel {
       authors: authors,
       volumeInfo: volumeInfo.toVolumeInfo(),
       accessInfo: accessInfo.toUiModel(),
-      isFavorite: isFavorite,
+      isFavorite: isFavorite ?? false,
       comments: comments.map((e) => e.toUiModel()).toList(),
       likesCount: likesCount,
       rate: rate,

@@ -6,6 +6,7 @@ extension UserExtension on UserDto {
       id: id,
       email: email,
       name: name,
+      photo: photo,
     );
   }
 }

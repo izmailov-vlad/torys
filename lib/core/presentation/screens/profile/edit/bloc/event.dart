@@ -6,7 +6,6 @@ class ProfileEditEvent with _$ProfileEditEvent {
 
   const factory ProfileEditEvent.save({
     required String name,
-    required String surname,
     required String email,
   }) = ProfileEditSaveEvent;
 }

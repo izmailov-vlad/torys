@@ -3,9 +3,14 @@ import '../../presentation.dart';
 class BaseIcon extends StatelessWidget {
   final VoidCallback? onTap;
   final Icon icon;
+  final Color? color;
 
-  const BaseIcon({Key? key, required this.onTap, required this.icon})
-      : super(key: key);
+  const BaseIcon({
+    Key? key,
+    required this.onTap,
+    required this.icon,
+    this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

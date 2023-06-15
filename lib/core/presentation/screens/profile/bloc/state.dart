@@ -4,5 +4,6 @@ part of 'bloc.dart';
 class ProfileState with _$ProfileState {
   const factory ProfileState.init() = ProfileInitState;
   const factory ProfileState.fetched({required UserUiModel user}) = FetchedState;
+  const factory ProfileState.showPhotoSelectionModal() = ShowPhotoSelectionModalState;
   const factory ProfileState.logout() = LogoutState;
 }

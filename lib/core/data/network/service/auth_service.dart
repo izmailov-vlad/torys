@@ -7,7 +7,15 @@ abstract class AuthService {
 
   Future<RefreshTokenResponseDto?> refreshToken(RefreshTokenRequestDto request);
 
+  Future<UserDto?> editUser(EditUserRequestDto request);
+
+  Future<UserDto?> updatePhoto(FormData formData);
+
   Future<LogoutResponseDto?> logout();
+
+  Future<DefaultResultDto?> userHaveWishes();
+
+  Future<DefaultResultDto?> delete();
 }
 
 @Injectable(as: AuthService)
@@ -49,5 +57,33 @@ class AuthServiceImpl implements AuthService {
     final logoutJson = await _apiClient.logout();
     final logoutDto = LogoutResponseDto.fromJson(logoutJson.data);
     return logoutDto;
+  }
+
+  @override
+  Future<UserDto?> editUser(EditUserRequestDto request) async {
+    final editUserJson = await _apiClient.editUser(request);
+    final userDto = UserDto.fromJson(editUserJson.data);
+    return userDto;
+  }
+
+  @override
+  Future<DefaultResultDto?> delete() async {
+    final editUserJson = await _apiClient.deleteUser();
+    final result = DefaultResultDto.fromJson(editUserJson.data);
+    return result;
+  }
+
+  @override
+  Future<DefaultResultDto?> userHaveWishes() async {
+    final userHaveWishesJson = await _apiClient.userHaveWishes();
+    final result = DefaultResultDto.fromJson(userHaveWishesJson.data);
+    return result;
+  }
+
+  @override
+  Future<UserDto?> updatePhoto(FormData formData) async {
+    final userJson = await _apiClient.userUpdatePhoto(formData);
+    final result = UserDto.fromJson(userJson.data);
+    return result;
   }
 }

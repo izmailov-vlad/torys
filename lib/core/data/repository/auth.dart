@@ -29,11 +29,41 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<RefreshTokenModel?> refreshToken(
-      RefreshTokenRequestDto request) async {
+    RefreshTokenRequestDto request,
+  ) async {
     final result = await _authService.refreshToken(request);
     if (result == null) return null;
 
     final authModel = result.toModel();
     return authModel;
+  }
+
+  @override
+  Future<UserModel?> editUser(EditUserRequestDto request) async {
+    final result = await _authService.editUser(request);
+    if (result == null) return null;
+
+    final authModel = result.toModel();
+    return authModel;
+  }
+
+  @override
+  Future<bool?> delete() async {
+    final result = await _authService.delete();
+    return result?.success;
+  }
+
+  @override
+  Future<bool?> userHaveWishes() async {
+    final result = await _authService.userHaveWishes();
+    return result?.success;
+  }
+
+  @override
+  Future<UserModel?> updatePhoto(MultipartFile photo) async {
+    final result = await _authService.updatePhoto(FormData.fromMap({
+      'photo': photo,
+    }));
+    return result?.toModel();
   }
 }

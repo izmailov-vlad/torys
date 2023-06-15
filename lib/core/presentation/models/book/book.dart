@@ -1,31 +1,19 @@
 part of presentation;
 
-class BookUiModel {
-  final String id;
-  final String title;
-  final String description;
-  final int pageCount;
-  final List<String> categories;
-  final List<String> authors;
-  final VolumeInfo volumeInfo;
-  final AccessInfoUiModel accessInfo;
-  final bool? isFavorite;
-  final List<CommentUiModel> comments;
-  final int likesCount;
-  final int rate;
-
-  BookUiModel({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.pageCount,
-    required this.likesCount,
-    required this.rate,
-    required this.categories,
-    required this.authors,
-    required this.volumeInfo,
-    required this.accessInfo,
-    required this.comments,
-    this.isFavorite,
-  });
+@freezed
+class BookUiModel with _$BookUiModel {
+  factory BookUiModel({
+    required String id,
+    required String title,
+    required String description,
+    required int pageCount,
+    required int likesCount,
+    required int rate,
+    required List<String> categories,
+    required List<String> authors,
+    required VolumeInfo volumeInfo,
+    required AccessInfoUiModel accessInfo,
+    required List<CommentUiModel> comments,
+    required bool isFavorite,
+  }) = _BookUiModel;
 }

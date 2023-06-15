@@ -3,9 +3,9 @@ part of data;
 @JsonSerializable()
 class PaginationDto {
   final int startIndex;
-  final int endIndex;
+  final int maxResult;
 
-  PaginationDto({required this.startIndex, required this.endIndex});
+  PaginationDto({required this.startIndex, required this.maxResult});
 
   factory PaginationDto.fromJson(Map<String, dynamic> json) =>
       _$PaginationDtoFromJson(json);

@@ -2,7 +2,7 @@ import '../../../../../injection/injection.dart';
 import '../../../presentation.dart';
 import 'bloc/bloc.dart';
 
-@RoutePage()
+@RoutePage<UserUiModel>()
 class ProfileEditScreen extends StatefulWidget implements AutoRouteWrapper {
   const ProfileEditScreen({Key? key}) : super(key: key);
 
@@ -37,63 +37,60 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppContainer(
-              withShadow: true,
-              borderColor: AppColorsScheme.grey1,
-              padding: EdgeInsets.symmetric(
-                horizontal: AppPadding.mediumPadding.w,
-                vertical: AppPadding.largePadding.w,
-              ),
-              child: BlocConsumer<ProfileEditBloc, ProfileEditState>(
-                buildWhen: (prev, curr) => curr is ProfileEditFetchState,
-                listenWhen: (prev, curr) =>
-                    curr is ProfileEditFetchState ||
-                    curr is ProfileEditNavigateBackState,
-                listener: (context, state) => state.maybeWhen(
-                  orElse: () {
-                    return null;
-                  },
-                  navigateBackState: () => context.router.pop(),
-                  fetch: (user) {
-                    nameController.text = user.name;
-                    emailController.text = user.email;
-                    return null;
+            Expanded(
+              child: AppContainer(
+                borderColor: AppColorsScheme.grey1,
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppPadding.mediumPadding.w,
+                  vertical: AppPadding.largePadding.w,
+                ),
+                child: BlocConsumer<ProfileEditBloc, ProfileEditState>(
+                  buildWhen: (prev, curr) => curr is ProfileEditFetchState,
+                  listenWhen: (prev, curr) =>
+                      curr is ProfileEditFetchState ||
+                      curr is ProfileEditNavigateBackState,
+                  listener: (context, state) => state.maybeWhen(
+                    orElse: () {
+                      return null;
+                    },
+                    navigateBackState: (user) => context.router.pop(user),
+                    fetch: (user) {
+                      nameController.text = user.name;
+                      emailController.text = user.email;
+                      return null;
+                    },
+                  ),
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () => BaseLoader(),
+                      fetch: (user) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          BaseText(
+                            title: 'Мои данные',
+                            style:
+                                context.theme.textTheme.headlineLarge?.toBold(),
+                          ),
+                          SizedBox(height: AppMargin.mediumMargin.h),
+                          BaseInputTextField(
+                            hintText: ' ФИО',
+                            headTitle: 'Имя Фамилия',
+                            controller: nameController,
+                          ),
+                          SizedBox(height: AppMargin.mediumMargin.h),
+                          BaseInputTextField(
+                            hintText: 'Введите email',
+                            headTitle: 'Email',
+                            controller: emailController,
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
-                builder: (context, state) {
-                  return state.maybeWhen(
-                    orElse: () => BaseLoader(),
-                    fetch: (user) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BaseText(
-                          title: 'Мои данные',
-                          style:
-                              context.theme.textTheme.headlineLarge?.toBold(),
-                        ),
-                        SizedBox(height: AppMargin.mediumMargin.h),
-                        BaseInputTextField(
-                          hintText: 'Введите имя',
-                          headTitle: 'Имя',
-                          controller: nameController,
-                        ),
-                        SizedBox(height: AppMargin.mediumMargin.h),
-                        BaseInputTextField(
-                          hintText: 'Введите фамилию',
-                          headTitle: 'Фамилия',
-                        ),
-                        SizedBox(height: AppMargin.mediumMargin.h),
-                        BaseInputTextField(
-                          hintText: 'Введите email',
-                          headTitle: 'Email',
-                          controller: emailController,
-                        ),
-                      ],
-                    ),
-                  );
-                },
               ),
             ),
+            SizedBox(height: AppMargin.mediumMargin.h),
             Row(
               children: [
                 Expanded(
@@ -102,7 +99,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           ProfileEditEvent.save(
                             name: nameController.text,
                             email: emailController.text,
-                            surname: '',
                           ),
                         ),
                     child: const Padding(

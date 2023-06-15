@@ -15,8 +15,8 @@ class BooksRepositoryImpl extends BooksRepository {
   }
 
   @override
-  Future<List<BookModel>?> getPopularBooks({required int userId}) async {
-    final popularBooksDto = await booksService.getPopularBooks(userId: userId);
+  Future<List<BookModel>?> getPopularBooks() async {
+    final popularBooksDto = await booksService.getPopularBooks();
     return popularBooksDto?.items
         .map<BookModel>((book) => book.toModel())
         .toList();
@@ -35,8 +35,10 @@ class BooksRepositoryImpl extends BooksRepository {
   }
 
   @override
-  Future<BooksModel?> getBooksByCategoryId(int id) async {
-    final booksByCategoryId = await booksService.getBooksByCategoryId(id);
+  Future<BooksModel?> getBooksByCategoryId(
+      {required int id, required PaginationRequestDto pagination}) async {
+    final booksByCategoryId =
+        await booksService.getBooksByCategoryId(id: id, pagination: pagination);
     return booksByCategoryId?.toModel();
   }
 
@@ -93,5 +95,11 @@ class BooksRepositoryImpl extends BooksRepository {
   Future<BooksModel?> getUserFavorite() async {
     final result = await booksService.getUserFavorite();
     return result?.toModel();
+  }
+
+  @override
+  Future<bool?> saveUserWishes({required WishesRequestDto request}) async {
+    final result = await booksService.setUserWishes(request: request);
+    return result.success;
   }
 }

@@ -1,5 +1,6 @@
 library domain;
 
+import 'package:dio/dio.dart';
 import 'package:drift/drift.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../data/storage/database_lib.dart';
@@ -15,6 +16,7 @@ import '../data/storage/secure_storage/secure_storage.dart';
 /// DATA
 import '../data/data.dart';
 
+import '../data/storage/shared_preferences/shared_preferences.dart';
 ///PRESENTATION
 
 import '../presentation/presentation.dart';
@@ -41,6 +43,18 @@ part 'usecases/authorization/login/params.dart';
 
 part 'usecases/user/save_user/params.dart';
 
+part 'usecases/user/delete/delete_user.dart';
+
+part 'usecases/user/wishes/check_wishes_passed.dart';
+
+part 'usecases/user/wishes/set_wishes_passed.dart';
+
+part 'usecases/user/wishes/set_wishes_passed_params.dart';
+
+part 'usecases/chat_gpt/params.dart';
+
+part 'usecases/chat_gpt/questions/params.dart';
+
 /// usecases
 
 part 'usecases/authorization/register/register.dart';
@@ -52,6 +66,12 @@ part 'usecases/authorization/google_login/google_login.dart';
 part 'usecases/authorization/logout.dart';
 
 part 'usecases/user/user.dart';
+
+part 'usecases/user/update_photo/update_photo.dart';
+
+part 'usecases/chat_gpt/ask_gpt.dart';
+
+part 'usecases/chat_gpt/questions/questions.dart';
 
 part 'usecases/user/save_user/save_user.dart';
 
@@ -100,6 +120,8 @@ part '../domain/repository/google_auth_repository.dart';
 
 part '../domain/repository/books_repository.dart';
 
+part '../domain/repository/chat_gpt.dart';
+
 /// adapters
 part 'adapters/user.dart';
 
@@ -122,6 +144,8 @@ part 'adapters/book/image_links.dart';
 part 'adapters/book/category_books.dart';
 
 part 'adapters/book/categories_books.dart';
+
+part 'adapters/chat_gpt/chat_gpt.dart';
 
 part 'adapters/authorization/auth.dart';
 
@@ -146,11 +170,21 @@ part 'models/book/comments.dart';
 
 part 'models/book/access_info.dart';
 
+part 'models/book/pagination.dart';
+
 part 'models/book/volume_info.dart';
 
 part 'models/book/image_links.dart';
 
+part 'models/chat_gpt/chat_gpt.dart';
+
+part 'models/chat_gpt/question.dart';
+
+part 'models/chat_gpt/chat_gpt_questions.dart';
+
 part 'models/user.dart';
+
+part 'models/user_photo.dart';
 
 part 'models/authorization/auth.dart';
 

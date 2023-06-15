@@ -1,19 +1,41 @@
 part of domain;
 
 @Injectable()
-class SaveUserUseCase implements UseCase<void, SaveUserParams> {
+class SaveUserUseCase implements UseCase<UserUiModel?, SaveUserParams> {
   final AppDatabase _appDatabase;
+  final AuthRepository _authRepository;
 
-  SaveUserUseCase(this._appDatabase);
+  const SaveUserUseCase(
+    this._appDatabase,
+    this._authRepository,
+  );
 
   @override
-  Future<void> call(SaveUserParams params) async {
-    final user = await _appDatabase.getUser();
-    if (user == null) return;
-    final editUser = user.copyWith(
-      email: params.email,
-      name: '${params.name} ${params.surname}',
+  Future<UserUiModel?> call(SaveUserParams params) async {
+    final currUser = await _appDatabase.getUser();
+    if (currUser == null) return null;
+    MultipartFile? userPhoto;
+    if (params.userPhoto != null) {
+      userPhoto = await MultipartFile.fromFile(
+        params.userPhoto!.userPhotoPath,
+        filename: params.userPhoto!.userPhotoName,
+      );
+    }
+
+    final user = await _authRepository.editUser(
+      EditUserRequestDto(
+        currUser.id,
+        params.email ?? currUser.email,
+        params.name ?? currUser.name,
+        {
+          'photo': userPhoto,
+        },
+      ),
     );
-    await _appDatabase.insertUser(editUser.toCompanion(false));
+    if (user == null) return null;
+
+    await _appDatabase.insertUser(user.toCompanion());
+
+    return user.toUserUiModel();
   }
 }

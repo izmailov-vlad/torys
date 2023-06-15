@@ -8,8 +8,8 @@ import 'ui.dart';
 
 void main() async {
   await configureInjection(Env.dev);
-  await AppConfiguration.instance.initConfiguration();
   WidgetsFlutterBinding.ensureInitialized();
+  await AppConfiguration.instance.initConfiguration();
   await Firebase.initializeApp();
   runApp(MyApp());
 }

@@ -19,7 +19,9 @@ class LaunchScreen extends StatelessWidget implements AutoRouteWrapper {
                 context.router.replace(const AuthorizationScreenRoute());
               } else if (route == NavigateToRoute.main) {
                 context.router.replace(const MainScreenRoute());
-                context.router.push(HomeScreenRoute());
+                context.router.push(const HomeScreenRoute());
+              } else if (route == NavigateToRoute.wishes) {
+                context.router.replace(const WishesScreenRoute());
               }
             },
             orElse: () {},
@@ -31,7 +33,18 @@ class LaunchScreen extends StatelessWidget implements AutoRouteWrapper {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Splash Screen'),
+                const BaseImage(
+                  imageType: ImageType.asset,
+                  imagePath: AppImages.icBookPrimary,
+                ),
+                BaseText(
+                  title: 'Book Readers',
+                  style: context.theme.textTheme.displayLarge
+                      ?.withColor(
+                        AppColorsScheme.mainColor,
+                      )
+                      .toBold(),
+                ),
               ],
             ),
           ],

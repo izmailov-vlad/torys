@@ -8,6 +8,7 @@ class BookDetailEvent with _$BookDetailEvent {
 
   const factory BookDetailEvent.changeFavorite({
     required String id,
+    required BookUiModel book,
   }) = BookChangeFavoriteEvent;
 
   const factory BookDetailEvent.addComment({
@@ -22,6 +23,6 @@ class BookDetailEvent with _$BookDetailEvent {
 
   const factory BookDetailEvent.changeBookRate({
     required int rate,
-    required String bookId,
+    required BookUiModel book,
   }) = BookDetailChangeRateEvent;
 }

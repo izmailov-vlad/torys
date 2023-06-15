@@ -7,6 +7,12 @@ abstract class ApiClient {
 
   Future<Response> auth(AuthRequestDto authRequestDto);
 
+  Future<Response> editUser(EditUserRequestDto editUserRequestDto);
+
+  Future<Response> userUpdatePhoto(FormData formData);
+
+  Future<Response> saveUserWishes(WishesRequestDto wishesRequestDto);
+
   Future<Response> register(RegisterRequestDto registerRequestDto);
 
   Future<Response> refreshToken(int userId);
@@ -19,13 +25,18 @@ abstract class ApiClient {
 
   Future<Response> getMainBooksContent({required int userId});
 
-  Future<Response> getBooksByCategoryId({required int id});
+  Future<Response> getBooksByCategoryId(
+      {required int id, required PaginationRequestDto pagination});
 
   Future<Response> logout();
+
+  Future<Response> deleteUser();
 
   Future<Response> getBooksByQuery({required SearchRequestDto request});
 
   Future<Response> getNewBooks();
+
+  Future<Response> getPopularBooks();
 
   Future<Response> changeFavorite({required String id});
 
@@ -47,6 +58,8 @@ abstract class ApiClient {
   });
 
   Future<Response> getUserFavorite();
+
+  Future<Response> userHaveWishes();
 }
 
 @Injectable(as: ApiClient)
@@ -119,8 +132,16 @@ class AppClientImpl implements ApiClient {
   }
 
   @override
-  Future<Response> getBooksByCategoryId({required int id}) async {
-    final json = await _dio.get('${ApiKeys.booksByCategoryId}?category_id=$id');
+  Future<Response> getBooksByCategoryId({
+    required int id,
+    required PaginationRequestDto pagination,
+  }) async {
+    final json = await _dio.get(
+      '${ApiKeys.booksByCategoryId}'
+      '?category_id=$id'
+      '&maxResult=${pagination.maxResult}'
+      '&startIndex=${pagination.startIndex}',
+    );
     return json;
   }
 
@@ -133,7 +154,9 @@ class AppClientImpl implements ApiClient {
   @override
   Future<Response> getBooksByQuery({required SearchRequestDto request}) async {
     final json = await _dio.get(
-      '${ApiKeys.booksByQuery}?query=${request.query}',
+      '${ApiKeys.booksByQuery}?query=${request.query}'
+      '&maxResult=${request.pagination.maxResult}'
+      '&startIndex=${request.pagination.startIndex}',
     );
     return json;
   }
@@ -203,4 +226,51 @@ class AppClientImpl implements ApiClient {
     final json = await _dio.get(ApiKeys.userFavorite);
     return json;
   }
+
+  @override
+  Future<Response> editUser(EditUserRequestDto editUserRequestDto) async {
+    final json = await _dio.post(
+      ApiKeys.editUser,
+      data: editUserRequestDto.toJson(),
+    );
+    return json;
+  }
+
+  @override
+  Future<Response> saveUserWishes(WishesRequestDto wishesRequestDto) async {
+    final json = await _dio.post(
+      ApiKeys.userSetWishes,
+      data: wishesRequestDto.toJson(),
+    );
+    return json;
+  }
+
+  @override
+  Future<Response> deleteUser() async {
+    final json = await _dio.post(
+      ApiKeys.delete,
+    );
+    return json;
+  }
+
+  @override
+  Future<Response> userHaveWishes() async {
+    final json = await _dio.get(
+      ApiKeys.userHaveWishes,
+    );
+    return json;
+  }
+
+  @override
+  Future<Response> userUpdatePhoto(FormData formData) async {
+    final json = await _dio.post(
+      ApiKeys.userUpdatePhoto,
+      data: formData,
+    );
+    return json;
+  }
+
+  @override
+  Future<Response> getPopularBooks() async =>
+      await _dio.get(ApiKeys.popularBooks);
 }

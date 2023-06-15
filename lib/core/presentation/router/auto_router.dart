@@ -18,6 +18,10 @@ class AppRouter extends $AppRouter {
   static const String profileScreen = 'profile';
   static const String profileEditScreen = '/profile_edit';
   static const String commentModal = 'commentModal';
+  static const String searchFiltersScreen = '/searchFilters';
+  static const String wishesScreen = '/wishes';
+  static const String cameraScreen = '/camera';
+  static const String displayPhotoScreen = '/displayPhotoScreen';
 
   @override
   List<AutoRoute> get routes => [
@@ -42,8 +46,24 @@ class AppRouter extends $AppRouter {
           page: BaseWebViewRoute.page,
         ),
         AutoRoute(
+          path: wishesScreen,
+          page: WishesScreenRoute.page,
+        ),
+        AutoRoute(
           page: ProfileEditScreenRoute.page,
           path: profileEditScreen,
+        ),
+        AutoRoute(
+          page: SearchFiltersPageRoute.page,
+          path: searchFiltersScreen,
+        ),
+        AutoRoute(
+          page: TakePhotoScreenRoute.page,
+          path: cameraScreen,
+        ),
+        AutoRoute(
+          page: DisplayPictureScreenRoute.page,
+          path: displayPhotoScreen,
         ),
         AutoRoute(
           path: mainScreen,

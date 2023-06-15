@@ -16,6 +16,11 @@ abstract class AppImages {
   static const icStar = 'assets/images/ic_star.png';
   static const icBook = 'assets/images/ic_book.png';
   static const icEdit = 'assets/images/mode_edit.png';
+  static const icChatGpt = 'assets/images/chat_gpt.png';
+  static const icLogout = 'assets/images/logout.png';
+  static const icBookPrimary = 'assets/images/ic_book_primary.png';
+  static const personNoBorder = 'assets/images/person_no_border.png';
+
 
   /// DEV
   static const book = 'assets/images/book.png';

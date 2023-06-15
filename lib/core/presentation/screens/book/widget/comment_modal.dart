@@ -1,6 +1,5 @@
 import '../../../presentation.dart';
 import '../../../widgets/base/base_icon.dart';
-import '../bloc/bloc.dart';
 
 class CommentModal extends StatefulWidget {
   final String bookId;

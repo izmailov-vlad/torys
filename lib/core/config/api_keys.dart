@@ -5,10 +5,14 @@ abstract class ApiKeys {
   static String auth = '/user/login';
   static String googleAuth = '/login/google';
   static String logout = '/user/logout';
+  static String delete = '/user/delete';
+  static String editUser = '/user/edit';
+  static String userUpdatePhoto = '/user/update-photo';
   static String register = '/user/register';
   static String refreshToken = '/user/auth/refresh';
   static String booksByQuery = '/book/book-by-query';
   static String newBooks = '/book/new-books';
+  static String popularBooks = '/book/popular-books';
   static String bookComments = '/book/comments';
   static String rateBook = '/book/rate';
   static String bookById = '/book/book-by-id';
@@ -19,4 +23,10 @@ abstract class ApiKeys {
   static String userFavorite = '/user/favorite';
   static String changeCommentLikeStatus = '/book/comment/change-like-status';
   static String storeComment = '/book/store-comment';
+  static String chatGptQuestions = '/chat-gpt/questions';
+  static String userSetWishes = '/user/set-wishes';
+  static String userHaveWishes = '/user/have-wishes';
+
+  // ChatGPT
+  static String chatGPT = '/chat-gpt';
 }

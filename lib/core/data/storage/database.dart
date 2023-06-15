@@ -9,6 +9,8 @@ class Users extends Table {
   TextColumn get email => text()();
 
   TextColumn get name => text()();
+
+  TextColumn get photo => text().nullable()();
 }
 
 class CategoryBooks extends Table {
@@ -22,15 +24,18 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(onCreate: (m) async {
       await m.createAll();
     }, onUpgrade: (migrator, from, to) async {
-      if (from == 1) {
+      if (from <= 1) {
         await migrator.createTable(categoryBooks);
+      }
+      if (from <= 2) {
+        await migrator.addColumn(users, users.photo);
       }
     });
   }

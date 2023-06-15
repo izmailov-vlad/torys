@@ -33,9 +33,14 @@ class AppConfiguration {
     /// ------------------------------------------------------------
     ///
     ///
+    final prefs = await SharedPreferences.getInstance();
     final appDatabase = AppDatabase();
-    getIt.registerSingleton<Dio>(withoutTokenDio,
-        instanceName: 'withoutTokenDio');
+    getIt.registerSingleton<Dio>(
+      withoutTokenDio,
+      instanceName: 'withoutTokenDio',
+    );
+    getIt.registerSingleton<SharedPreferences>(prefs);
+
     getIt.registerSingleton<Dio>(withTokenDio, instanceName: 'withTokenDio');
     getIt.registerSingleton<AppDatabase>(appDatabase);
     withTokenDio.interceptors.add(getIt.get<AppInterceptor>());

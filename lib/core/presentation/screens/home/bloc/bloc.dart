@@ -35,20 +35,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       emit(const LoadingState());
       final categories = await getCategoriesUseCase(const NoParams());
-      // final books = await _getPopularBooksUseCase();
+      if (categories != null) {
+        emit(HomeState.fetchedCategories(categories: categories));
+      }
+
       final newBooks = await _getNewBooksUseCase(const NoParams());
+      if (newBooks != null) {
+        emit(HomeState.fetchedNewBooks(newBooks: newBooks.items));
+      }
+
+      final popularBooks = await _getPopularBooksUseCase(const NoParams());
+      if (popularBooks != null) {
+        emit(HomeState.fetchedPopularBooks(popularBooks: popularBooks));
+      }
 
       final booksByCategories = await _getBooksByCategories(const NoParams());
-
-      emit(FetchedState(
-        categories: categories ?? [],
-        books: [],
-        booksByCategories: booksByCategories ??
-            CategoriesBooksUIModel(
-              categoriesBooks: [],
-            ),
-        newBooks: newBooks?.items ?? [],
-      ));
+      if (booksByCategories != null) {
+        emit(HomeState.fetchedBooksByCategories(
+          booksByCategories: booksByCategories,
+        ));
+      }
     } catch (error, stackTrace) {
       ErrorHandler.catchError(
         error,
@@ -61,11 +67,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _showAll(ShowAllEvent event, _Emit emit) async {
-    final books = await _getBooksByCategoryId(
-      BooksByCategoryIdParams(event.categoryId),
-    );
-    if (books == null) return;
-    emit(HomeState.navigateToBooks(books: books));
+    emit(HomeState.navigateToBooks(categoryId: event.categoryId));
   }
 
   Future<void> _onChooseBook(ChooseBookEvent event, _Emit emit) async {

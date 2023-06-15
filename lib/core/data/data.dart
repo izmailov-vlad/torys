@@ -22,6 +22,14 @@ part 'network/dto/default.dart';
 
 part 'network/dto/user/user.dart';
 
+part 'network/dto/user/user_photo.dart';
+
+part 'network/dto/user/edit/request/request.dart';
+
+part 'network/dto/wishes/wishes.dart';
+
+part 'network/dto/wishes/wish.dart';
+
 part 'network/dto/search_params/pagination.dart';
 
 part 'network/dto/search/request/search.dart';
@@ -36,6 +44,14 @@ part 'network/dto/auth/response/auth.dart';
 
 part 'network/dto/auth/request/google_auth.dart';
 
+part 'network/chat_gpt_client.dart';
+
+part 'network/dto/chat_gpt/questions/response/response.dart';
+
+part 'network/dto/chat_gpt/request/request.dart';
+
+part 'network/dto/chat_gpt/response/response.dart';
+
 part 'network/dto/logout/logout.dart';
 
 part 'network/dto/register/request/register.dart';
@@ -47,6 +63,8 @@ part 'network/dto/refresh/request/refresh.dart';
 part 'network/dto/refresh/response/refresh.dart';
 
 part 'network/dto/book/book.dart';
+
+part 'network/dto/book/request/pagination.dart';
 
 part 'network/dto/book/comment.dart';
 
@@ -88,6 +106,8 @@ part 'network/service/google_auth_service.dart';
 
 part 'network/service/books_service.dart';
 
+part 'network/service/chat_gpt.dart';
+
 part 'network/app_client.dart';
 
 part 'network/interceptor.dart';
@@ -100,6 +120,8 @@ part 'repository/books.dart';
 part 'repository/auth.dart';
 
 part 'repository/google_auth.dart';
+
+part 'repository/chat_gpt.dart';
 
 /// ADAPTERS
 part 'adapters/book/book.dart';
@@ -131,5 +153,7 @@ part 'adapters/authorization/google_auth.dart';
 part 'adapters/authorization/logout.dart';
 
 part 'adapters/authorization/refresh_token.dart';
+
+part 'adapters/chat_gpt/chat_gpt.dart';
 
 part 'adapters/genre.dart';

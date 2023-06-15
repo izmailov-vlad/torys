@@ -3,17 +3,17 @@ part of data;
 abstract class BooksService {
   Future<CategoriesDto?> getCategories();
 
-  Future<BooksDto?> getPopularBooks({required int userId});
-
   Future<CategoriesBooksDto?> getBooksByCategories();
 
-  Future<BooksDto?> getBooksByCategoryId(int id);
+  Future<BooksDto?> getBooksByCategoryId({required int id, required PaginationRequestDto pagination});
 
   Future<BookDto?> getBookById(String id);
 
   Future<BooksDto?> getBooksByQuery({required SearchRequestDto request});
 
   Future<BooksDto?> getNewBooks();
+
+  Future<BooksDto?> getPopularBooks();
 
   Future<DefaultResultDto?> changeFavorite({required String id});
 
@@ -35,6 +35,8 @@ abstract class BooksService {
   });
 
   Future<BooksDto?> getUserFavorite();
+
+  Future<DefaultResultDto> setUserWishes({required WishesRequestDto request});
 }
 
 @Injectable(as: BooksService)
@@ -51,10 +53,10 @@ class BookServiceImpl extends BooksService {
   }
 
   @override
-  Future<BooksDto?> getPopularBooks({required int userId}) async {
+  Future<BooksDto?> getPopularBooks() async {
     final popularBooksJson =
-        await _appClient.getMainBooksContent(userId: userId);
-    final BooksDto genresDto = BooksDto.fromJson(popularBooksJson.data);
+        await _appClient.getPopularBooks();
+    final BooksDto genresDto = BooksDto.fromJson(popularBooksJson.data['data']);
     return genresDto;
   }
 
@@ -74,8 +76,8 @@ class BookServiceImpl extends BooksService {
   }
 
   @override
-  Future<BooksDto?> getBooksByCategoryId(int id) async {
-    final booksJson = await _appClient.getBooksByCategoryId(id: id);
+  Future<BooksDto?> getBooksByCategoryId({required int id, required PaginationRequestDto pagination}) async {
+    final booksJson = await _appClient.getBooksByCategoryId(id: id, pagination: pagination);
     final BooksDto booksDto = BooksDto.fromJson(booksJson.data['data']);
     return booksDto;
   }
@@ -143,5 +145,12 @@ class BookServiceImpl extends BooksService {
     final userFavoriteJson = await _appClient.getUserFavorite();
     final BooksDto books = BooksDto.fromJson(userFavoriteJson.data);
     return books;
+  }
+
+  @override
+  Future<DefaultResultDto> setUserWishes({required WishesRequestDto request}) async {
+    final wishesJson = await _appClient.saveUserWishes(request);
+    final DefaultResultDto result = DefaultResultDto.fromJson(wishesJson.data);
+    return result;
   }
 }

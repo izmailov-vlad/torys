@@ -5,11 +5,15 @@ class BookChangeFavoriteUseCase
     implements UseCase<bool?, BookChangeFavoriteParams> {
   final BooksRepository _booksRepository;
 
-  BookChangeFavoriteUseCase(this._booksRepository);
+  const BookChangeFavoriteUseCase(
+    this._booksRepository,
+  );
 
   @override
   Future<bool?> call(BookChangeFavoriteParams params) async {
-    final result = await _booksRepository.changeBookFavorite(id: params.id);
-    return result;
+    final isFavorite = await _booksRepository.changeBookFavorite(
+      id: params.bookId,
+    );
+    return isFavorite;
   }
 }

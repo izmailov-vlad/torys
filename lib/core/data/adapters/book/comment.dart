@@ -6,7 +6,7 @@ extension CommentExtension on CommentDto {
       id: id,
       text: body,
       user: user.toModel(),
-      liked: liked,
+      liked: liked, likesCount: likesCount ?? 0,
     );
   }
 }

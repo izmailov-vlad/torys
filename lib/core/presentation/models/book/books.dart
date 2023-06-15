@@ -1,9 +1,8 @@
 part of presentation;
 
-class BooksUiModel {
-  final List<BookUiModel> items;
-
-  BooksUiModel({
-    required this.items,
-  });
+@Freezed(makeCollectionsUnmodifiable: false)
+class BooksUiModel with _$BooksUiModel {
+  factory BooksUiModel({
+    required final List<BookUiModel> items,
+  }) = _BooksUiModel;
 }

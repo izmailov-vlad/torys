@@ -7,6 +7,14 @@ abstract class AuthRepository {
 
   Future<RefreshTokenModel?> refreshToken(RefreshTokenRequestDto request);
 
+  Future<UserModel?> editUser(EditUserRequestDto request);
+
+  Future<UserModel?> updatePhoto(MultipartFile photo);
+
   Future<LogoutModel?> logout();
+
+  Future<bool?> delete();
+
+  Future<bool?> userHaveWishes();
 }
 

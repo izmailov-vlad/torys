@@ -3,8 +3,12 @@ part of domain;
 @Injectable()
 class GetUserFavoriteBookUseCase implements UseCase<BooksUiModel?, NoParams> {
   final BooksRepository _booksRepository;
+  final AppDatabase _appDatabase;
 
-  GetUserFavoriteBookUseCase(this._booksRepository);
+  const GetUserFavoriteBookUseCase(
+    this._booksRepository,
+    this._appDatabase,
+  );
 
   @override
   Future<BooksUiModel?> call(NoParams params) async {

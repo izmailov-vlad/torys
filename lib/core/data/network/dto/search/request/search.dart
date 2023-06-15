@@ -3,9 +3,12 @@ part of data;
 @JsonSerializable()
 class SearchRequestDto {
   final String query;
-  // final PaginationDto pagination;
+  final PaginationRequestDto pagination;
 
-  SearchRequestDto({required this.query});
+  SearchRequestDto({
+    required this.query,
+    required this.pagination,
+  });
 
   factory SearchRequestDto.fromJson(Map<String, dynamic> json) =>
       _$SearchRequestDtoFromJson(json);

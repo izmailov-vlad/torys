@@ -1,7 +1,7 @@
 part of domain;
 
 class BookChangeFavoriteParams {
-  final String id;
+  final String bookId;
 
-  BookChangeFavoriteParams(this.id);
+  BookChangeFavoriteParams(this.bookId);
 }

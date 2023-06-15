@@ -30,13 +30,13 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
   }
 
   Future<void> _save(ProfileEditSaveEvent event, _Emit emit) async {
-    await _saveUserUseCase(
+    final editUser = await _saveUserUseCase(
       SaveUserParams(
         name: event.name,
-        surname: event.surname,
         email: event.email,
       ),
     );
-    emit(const ProfileEditState.navigateBackState());
+    if (editUser == null) return;
+    emit(ProfileEditState.navigateBackState(user: editUser));
   }
 }
